@@ -1,11 +1,10 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.example.ioc.Repositorio;
@@ -30,14 +29,15 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	Repositorio repo2;
 	
-	
+	@Value("${mi.valor:valor por defecto}")
+	String valor;
 
 	@Override
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
 		//Servicio srv = new Servicio(new Repositorio(new Configuracion()));
 		//AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-
+		System.err.println(valor);
 		srv.guardar();
 		repo1.guardar();
 		repo2.guardar();
