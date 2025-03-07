@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.example.ioc.Rango;
 import com.example.ioc.Repositorio;
 import com.example.ioc.Servicio;
 
@@ -31,6 +32,9 @@ public class DemoApplication implements CommandLineRunner {
 	
 	@Value("${mi.valor:valor por defecto}")
 	String valor;
+	
+	@Autowired
+	Rango rango;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -38,6 +42,7 @@ public class DemoApplication implements CommandLineRunner {
 		//Servicio srv = new Servicio(new Repositorio(new Configuracion()));
 		//AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 		System.err.println(valor);
+		System.err.println(rango.toString());
 		srv.guardar();
 		repo1.guardar();
 		repo2.guardar();
