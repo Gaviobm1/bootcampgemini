@@ -24,6 +24,13 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	Servicio srv;
 	
+	@Autowired
+	Repositorio repo1;
+	
+	@Autowired
+	Repositorio repo2;
+	
+	
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -32,6 +39,8 @@ public class DemoApplication implements CommandLineRunner {
 		//AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 
 		srv.guardar();
+		repo1.guardar();
+		repo2.guardar();
 	}
 	
 //	@Bean

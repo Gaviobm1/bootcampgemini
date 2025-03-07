@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-@Qualifier("mentira")
 //@Primary
 public class RepositorioMock implements Repositorio {
 	

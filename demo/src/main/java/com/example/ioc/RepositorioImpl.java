@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-@Qualifier("verdad")
 public class RepositorioImpl implements Repositorio {
 	public RepositorioImpl(Configuracion config, Registro registro) {
 		
