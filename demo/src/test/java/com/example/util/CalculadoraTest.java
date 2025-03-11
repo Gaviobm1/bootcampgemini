@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class CalculadoraTest {
 	
@@ -53,6 +55,13 @@ class CalculadoraTest {
 			void testSumaInt() {
 				var resultado = calc.suma(13, 5);
 				assertEquals(18, resultado);
+			}
+			@DisplayName("Suma dos numeros")
+			@ParameterizedTest(name = "{0} + {1} = {2}")
+			@CsvSource({"1,2,3", "2,-1,1", "-1,2,1", "-2,-1,-3", "0,0,0", "0.1, 0.2, 0.3"})
+			void testSumaParametrizado(double operando1, double operando2, double esperado) {
+				var resultado = calc.suma(operando1, operando2);
+				assertEquals(esperado, resultado);
 			}
 		}
 		@Nested
