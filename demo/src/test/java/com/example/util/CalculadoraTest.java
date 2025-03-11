@@ -3,6 +3,10 @@ package com.example.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -114,6 +118,36 @@ class CalculadoraTest {
 				} catch (ArithmeticException e) {
 					assertEquals("/ by zero", e.getMessage());
 				}
+			}
+		}
+		
+		@Nested
+		@DisplayName("Suplanta")
+		class Suplantaciones {
+			@Test
+			void suplanta() {
+				var mock = mock(Calculadora.class);
+				when(mock.suma(anyInt(), anyInt())).thenReturn(3).thenReturn(5);
+				
+				var actual = mock.suma(2,  2);
+				assertEquals(3, actual);
+				assertEquals(5, mock.suma(2,  2));
+				assertEquals(5, mock.suma(22,  2));
+			}
+			@Test
+			void suplant2() {
+				var calc = mock(Calculadora.class);
+				when(calc.suma(anyInt(), anyInt())).thenReturn(4);
+				var obj = new Factura(calc);
+				var actual = obj.calcularTotal(2, 2);
+				assertEquals(4, actual);
+				verify(calc).suma(2,2);
+			}
+			@Test
+			void Integracion() {
+				var obj = new Factura(new Calculadora());
+				var actual = obj.calcularTotal(2,2);
+				assertEquals(4, actual);
 			}
 		}
 		

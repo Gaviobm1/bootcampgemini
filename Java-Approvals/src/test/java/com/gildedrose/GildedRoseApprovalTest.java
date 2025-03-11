@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @UseReporter(DiffReporter.class)
@@ -28,7 +29,9 @@ public class GildedRoseApprovalTest {
     	class OK {
     	    @DisplayName("Calidad no baja de 80 para Sulfuras")
     	    @ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
-			@CsvSource({"5, 80", "1, 80"})
+			@CsvSource({
+				"5, 80", 
+				"1, 80"})
     	    public void calidadSulfuras(int sellIn, int quality) {
     	    	Item[] items = new Item[]{new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)};
     	    	GildedRose app = new GildedRose(items);
@@ -136,6 +139,20 @@ public class GildedRoseApprovalTest {
     }
    
     
+   
+	@ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
+	@CsvFileSource(resources = "casos-de-prueba.csv", numLinesToSkip = 1)
+	@DisplayName("Conjured producto")
+	public void dataSourceTest(String producto, int sellIn, int quality, int sellInDespues, int qualityDespues) {
+		String name = producto.replace("'\'", "");
+		Item product =new Item(name, sellIn, quality);
+	    GildedRose app = new GildedRose(new Item[] {product});
+	    app.updateQuality();
+	    assertAll("Calidad", 
+	    		() -> assertEquals(qualityDespues, product.quality, "sellIn"),
+	    		() -> assertEquals(sellInDespues, product.sellIn, "quality")
+	    		);
+	}
 
     @Test
     public void thirtyDays() {
