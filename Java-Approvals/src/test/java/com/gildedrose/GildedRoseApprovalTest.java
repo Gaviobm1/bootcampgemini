@@ -27,7 +27,7 @@ public class GildedRoseApprovalTest {
     	@DisplayName("Casos válidos")
     	class OK {
     	    @DisplayName("Calidad no baja de 80 para Sulfuras")
-    	    @ParameterizedTest(name = "new Item(\"Sulfuras, Hand of Ragnaros\", {0}, {1})")
+    	    @ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
 			@CsvSource({"5, 80", "1, 80"})
     	    public void calidadSulfuras(int sellIn, int quality) {
     	    	Item[] items = new Item[]{new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)};
@@ -65,38 +65,20 @@ public class GildedRoseApprovalTest {
     	@Nested
     	@DisplayName("Casos válidos")
     	class OK {
-    		@DisplayName("Calidad no baja de 0")
-    		@ParameterizedTest(name = "new Item(\"item\", {0}, {1})")
-    		@CsvSource({"-1, 1", "0, 0"})
-    		public void calidadNoReduceMenorQueCero(int sellIn, int quality) {
+    		@DisplayName("Otros productos")
+    		@ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
+    		@CsvSource({
+    			"-1, 1, -2, 0", 
+    			"0, 0, -1, 0", 
+    			"7, 6, 6, 5", 
+    			"-10, 3, -11, 1"})
+    		public void calidadNoReduceMenorQueCero(int sellIn, int quality, int sellInDespues, int qualityDespues) {
     			Item[] items = new Item[]{new Item("item", sellIn, quality)};
     	    	GildedRose app = new GildedRose(items);
     	    	app.updateQuality();
     	    	assertAll("Calidad", 
-    	    			() -> assertEquals(0, items[0].quality),
-    	    			() -> assertEquals(sellIn - 1, items[0].sellIn)
-    	    			);
-    		}
-    		@DisplayName("Calidad degrada 1 por día antes de sellIn = 0")
-    		@Test
-    		public void calidadReduceUnoPorDia() {
-    			Item[] items = new Item[]{new Item("item", 7, 6)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(5, items[0].quality),
-    	    			() -> assertEquals(6, items[0].sellIn)
-    	    			);
-    		}
-    		@DisplayName("Calidad degrada 2 por día cuando sellIn < 0")
-    		@Test
-    		public void calidadReduceDosDespuesDeSellIn() {
-    			Item[] items = new Item[]{new Item("item", -10, 3)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(1, items[0].quality),
-    	    			() -> assertEquals(-11, items[0].sellIn)
+    	    			() -> assertEquals(qualityDespues, items[0].quality),
+    	    			() -> assertEquals(sellInDespues, items[0].sellIn)
     	    			);
     		}
     	}
@@ -108,48 +90,20 @@ public class GildedRoseApprovalTest {
     	@Nested
     	@DisplayName("Casos válidos")
     	class OK {
-    		@Test
-    		@DisplayName("Calidad aumenta por 1 cuando sellIn > 10")
-    		public void calidadAumentaPorUno() {
-    			Item[] items = new Item[]{new Item("Backstage passes to a TAFKAL80ETC concert", 11, 3)};
+    		@ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
+    		@CsvSource({
+    			"5, 9, 4, 12", 
+    			"10, 5, 9, 7", 
+    			"11, 3, 10, 4",
+    			"-1, 9, -2, 0"})
+    		@DisplayName("Backstage passes")
+    		public void backStagePassesTest(int sellIn, int quality, int sellInDespues, int qualityDespues) {
+    			Item[] items = new Item[]{new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)};
     	    	GildedRose app = new GildedRose(items);
     	    	app.updateQuality();
     	    	assertAll("Calidad", 
-    	    			() -> assertEquals(4, items[0].quality),
-    	    			() -> assertEquals(10, items[0].sellIn)
-    	    			);
-    		}
-    		@Test
-    		@DisplayName("Calidad aumenta por 2 cuando 5 < sellIn <= 10")
-    		public void calidadAumentaPorDos() {
-    			Item[] items = new Item[]{new Item("Backstage passes to a TAFKAL80ETC concert", 10, 5)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(7, items[0].quality),
-    	    			() -> assertEquals(9, items[0].sellIn)
-    	    			);
-    		}
-    		@Test
-    		@DisplayName("Calidad aumenta por 3 cuando sellIn <= 5")
-    		public void calidadAumentaPorTres() {
-    			Item[] items = new Item[]{new Item("Backstage passes to a TAFKAL80ETC concert", 5, 9)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(12, items[0].quality),
-    	    			() -> assertEquals(4, items[0].sellIn)
-    	    			);
-    		}
-    		@Test
-    		@DisplayName("Calidad se reduce a 0 cuando sellIn < 0")
-    		public void calidadReduceACero() {
-    			Item[] items = new Item[]{new Item("Backstage passes to a TAFKAL80ETC concert", -1, 9)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(0, items[0].quality),
-    	    			() -> assertEquals(-2, items[0].sellIn)
+    	    			() -> assertEquals(qualityDespues, items[0].quality),
+    	    			() -> assertEquals(sellInDespues, items[0].sellIn)
     	    			);
     		}
     	}
@@ -161,43 +115,26 @@ public class GildedRoseApprovalTest {
     	@Nested
     	@DisplayName("Casos válidos")
     	class OK {
-    		@ParameterizedTest(name = "new Item(\"Conjured Mana Cake\", {0}, {1})")
-    		@CsvSource({"10, 3", "0, 0"})
-    		@DisplayName("Reduce calidad por 2 cuando sellIn >= 0")
-    		public void conjuredReducePorDosEncimaDeCero(int sellIn, int quality) {
+    		@ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
+    		@CsvSource({
+    			"10, 3, 9, 1", 
+    			"0, 0, -1, 0",
+    			"-1, 4, -2, 0",
+    			"-1, 0, -2, 0", 
+    			"1, 0, 0, 0"})
+    		@DisplayName("Conjured producto")
+    		public void conjuredReducePorDosCeroOMas(int sellIn, int quality, int sellInDespues, int qualityDespues) {
     			Item[] items = new Item[]{new Item("Conjured Mana Cake", sellIn, quality)};
     	    	GildedRose app = new GildedRose(items);
     	    	app.updateQuality();
     	    	assertAll("Calidad", 
-    	    			() -> assertEquals(quality == 0 || quality == 1 ? 0 : quality - 2, items[0].quality),
-    	    			() -> assertEquals(sellIn - 1, items[0].sellIn)
+    	    			() -> assertEquals(qualityDespues, items[0].quality),
+    	    			() -> assertEquals(sellInDespues, items[0].sellIn)
     	    			);
-    		}
-    		@Test
-    		@DisplayName("Reduce calidad por 4 cuando sellIn < 0")
-    		public void conjuredReducePorCuatroDebajoDeCero() {
-    			Item[] items = new Item[]{new Item("Conjured Mana Cake", -1, 4)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(0, items[0].quality),
-    	    			() -> assertEquals(-2, items[0].sellIn)
-    	    			);
-    		}
-    		@ParameterizedTest(name = "new Item(\"Conjured Mana Cake\", {0}, {1})")
-    		@CsvSource({"-1, 0", "1, 0", "10, 0"})
-    		@DisplayName("Calidad no reduce por debajo de 0")
-    		public void conjuredNoReducePorDebajoDeCero(int sellIn, int quality) {
-    			Item[] items = new Item[]{new Item("Conjured Mana Cake", sellIn, quality)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	assertAll("Calidad", 
-    	    			() -> assertEquals(0, items[0].quality),
-    	    			() -> assertEquals(sellIn - 1, items[0].sellIn)
-    	    			);
-    		}
-    	}
+    		}		
+    	}	
     }
+   
     
 
     @Test
