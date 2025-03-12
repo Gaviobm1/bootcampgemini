@@ -2,7 +2,6 @@ package com.gildedrose;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,24 +40,6 @@ public class GildedRoseApprovalTest {
     	    			() -> assertEquals(sellIn, items[0].sellIn)
     	    			);
     	    } 
-    	}
-    	@Nested
-    	@DisplayName("Casos inválidos")
-    	class KO {
-    		@DisplayName("Throws para calidad menor que 80")
-    	    @ParameterizedTest(name = "new Item(\"Sulfuras, Hand of Ragnaros\", {0}, {1})")
-			@CsvSource({"-1, 66", "0, 51", "-2, -1"})
-    	    public void calidadSulfurasThrows(int sellIn, int quality) {
-    	    	Item[] items = new Item[]{new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)};
-    	    	GildedRose app = new GildedRose(items);
-    	    	app.updateQuality();
-    	    	Exception thrown = assertThrows(Exception.class, 
-    	    			() -> {
-    	    				throw new Exception("Calidad nunca menor que 80");
-    	    				}
-    	    			);
-    	    	assertEquals("Calidad nunca menor que 80", thrown.getMessage());
-    	    }
     	}
     }
     
