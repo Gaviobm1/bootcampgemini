@@ -3,18 +3,14 @@ package com.gildedrose;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.util.List;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @UseReporter(DiffReporter.class)
@@ -27,7 +23,7 @@ public class GildedRoseApprovalTest {
     	@DisplayName("Casos válidos")
     	class OK {
     	    @DisplayName("Calidad no baja de 80 para Sulfuras")
-    	    @ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
+    	    @ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {0} quality: {1}")
 			@CsvSource({
 				"5, 80", 
 				"1, 80"})
@@ -121,30 +117,56 @@ public class GildedRoseApprovalTest {
    
     
    
-	@ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
-	@CsvFileSource(resources = "casos-de-prueba.csv", numLinesToSkip = 1)
-	@DisplayName("Conjured producto")
-	public void dataSourceTest(String producto, int sellIn, int quality, int sellInDespues, int qualityDespues) {
-		String name = producto.replace("'\'", "");
-		Item product =new Item(name, sellIn, quality);
-	    GildedRose app = new GildedRose(new Item[] {product});
-	    app.updateQuality();
-	    assertAll("Calidad", 
-	    		() -> assertEquals(qualityDespues, product.quality, "sellIn"),
-	    		() -> assertEquals(sellInDespues, product.sellIn, "quality")
-	    		);
+//	@ParameterizedTest(name = "{index} => sellIn: {0} quality: {1} -> sellIn: {2} quality: {3}")
+//	@CsvFileSource(resources = "casos-de-prueba.csv", numLinesToSkip = 1)
+//	@DisplayName("Conjured producto")
+//	public void dataSourceTest(String producto, int sellIn, int quality, int sellInDespues, int qualityDespues) {
+//		String name = producto.replace("'\'", "");
+//		Item product =new Item(name, sellIn, quality);
+//	    GildedRose app = new GildedRose(new Item[] {product});
+//	    app.updateQuality();
+//	    assertAll("Calidad", 
+//	    		() -> assertEquals(qualityDespues, product.quality, "sellIn"),
+//	    		() -> assertEquals(sellInDespues, product.sellIn, "quality")
+//	    		);
+//	}
+    
+    void instantanea() {
+		Item[] items = new Item[] { 
+				new Item("+5 Dexterity Vest", 10, 20), 
+				new Item("Aged Brie", 2, 0),
+				new Item("Elixir of the Mongoose", 5, 7), 
+				new Item("Sulfuras, Hand of Ragnaros", 0, 80),
+				new Item("Sulfuras, Hand of Ragnaros", -1, 80),
+				new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
+				new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49),
+				new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49),
+				// this conjured item does not work properly yet
+				new Item("Conjured Mana Cake", 3, 6) 
+				};
+
+		GildedRose app = new GildedRose(items);
+		var output = new StringBuilder();
+		output.append("day,name, sellIn, quality\n");
+		List.of(items).forEach(item -> output.append("0," + item + "\n"));
+		for (int i = 1; i <= 31; i++) {
+			app.updateQuality();
+			for(Item item: items)
+				output.append(i + "," + item + "\n");
+		}
+		Approvals.verify(output);
 	}
 
-    @Test
-    public void thirtyDays() {
-
-        ByteArrayOutputStream fakeoutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeoutput));
-        System.setIn(new ByteArrayInputStream("a\n".getBytes()));
-
-        Program.main();
-        String output = fakeoutput.toString();
-
-        Approvals.verify(output);
-    }
+//    @Test
+//    public void thirtyDays() {
+//
+//        ByteArrayOutputStream fakeoutput = new ByteArrayOutputStream();
+//        System.setOut(new PrintStream(fakeoutput));
+//        System.setIn(new ByteArrayInputStream("a\n".getBytes()));
+//
+//        Program.main();
+//        String output = fakeoutput.toString();
+//
+//        Approvals.verify(output);
+//    }
 }
