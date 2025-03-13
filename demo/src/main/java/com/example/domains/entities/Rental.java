@@ -22,7 +22,7 @@ public class Rental implements Serializable {
 	@Column(name="rental_id", unique=true, nullable=false)
 	private int rentalId;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	@Temporal(TemporalType.TIMESTAMP)

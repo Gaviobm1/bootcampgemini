@@ -38,7 +38,7 @@ public class Customer implements Serializable {
 	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update", insertable=false, updatable=false)
+	@Column(name="last_update")
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Address

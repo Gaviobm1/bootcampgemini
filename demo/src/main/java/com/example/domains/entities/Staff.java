@@ -19,7 +19,7 @@ public class Staff implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="staff_id", unique=true, nullable=false)
-	private int staffId;
+	private byte staffId;
 
 	@Column(nullable=false)
 	private byte active;
@@ -33,7 +33,7 @@ public class Staff implements Serializable {
 	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	@Column(length=40)
@@ -70,11 +70,11 @@ public class Staff implements Serializable {
 	public Staff() {
 	}
 
-	public int getStaffId() {
+	public byte getStaffId() {
 		return this.staffId;
 	}
 
-	public void setStaffId(int staffId) {
+	public void setStaffId(byte staffId) {
 		this.staffId = staffId;
 	}
 

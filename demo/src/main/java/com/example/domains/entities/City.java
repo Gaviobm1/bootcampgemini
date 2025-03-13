@@ -24,7 +24,7 @@ public class City implements Serializable {
 	@Column(nullable=false, length=50)
 	private String city;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Address

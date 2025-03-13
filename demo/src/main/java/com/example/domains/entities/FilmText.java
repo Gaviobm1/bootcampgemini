@@ -17,7 +17,7 @@ public class FilmText implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="film_id", unique=true, nullable=false)
-	private Integer filmId;
+	private short filmId;
 
 	@Lob
 	private String description;
@@ -28,11 +28,11 @@ public class FilmText implements Serializable {
 	public FilmText() {
 	}
 
-	public Integer getFilmId() {
+	public short getFilmId() {
 		return this.filmId;
 	}
 
-	public void setFilmId(Integer filmId) {
+	public void setFilmId(short filmId) {
 		this.filmId = filmId;
 	}
 

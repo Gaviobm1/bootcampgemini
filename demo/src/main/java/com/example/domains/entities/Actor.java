@@ -1,17 +1,10 @@
 package com.example.domains.entities;
 
 import java.io.Serializable;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import java.util.Objects;
 
 
 /**
@@ -43,6 +36,18 @@ public class Actor implements Serializable {
 	private List<FilmActor> filmActors;
 
 	public Actor() {
+	}
+
+	public Actor(int actorId, String firstName, String lastName) {
+		super();
+		this.actorId = actorId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public Actor(int actorId) {
+		super();
+		this.actorId = actorId;
 	}
 
 	public int getActorId() {
@@ -99,4 +104,35 @@ public class Actor implements Serializable {
 		return filmActor;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(actorId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Actor other = (Actor) obj;
+		return actorId == other.actorId;
+	}
+
+	@Override
+	public String toString() {
+		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
+				+ lastUpdate + "]";
+	}
+
+	public void jubilate() {
+		// pon active a false
+		// pon fecha de baja a la fecha actual
+	}
+
+	public void premioRecibido(String premio) {
+		// ...
+	}
 }

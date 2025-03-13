@@ -30,7 +30,7 @@ public class Address implements Serializable {
 	@Column(nullable=false, length=20)
 	private String district;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)

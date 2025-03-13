@@ -18,7 +18,7 @@ public class Language implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="language_id", unique=true, nullable=false)
+	@Column(name="language_id", insertable=false, updatable=false, unique=true, nullable=false)
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)

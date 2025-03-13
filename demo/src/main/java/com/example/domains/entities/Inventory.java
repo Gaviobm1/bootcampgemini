@@ -21,7 +21,7 @@ public class Inventory implements Serializable {
 	@Column(name="inventory_id", unique=true, nullable=false)
 	private int inventoryId;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Film

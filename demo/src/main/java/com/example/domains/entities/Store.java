@@ -19,9 +19,9 @@ public class Store implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="store_id", unique=true, nullable=false)
-	private int storeId;
+	private byte storeId;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Customer
@@ -49,11 +49,11 @@ public class Store implements Serializable {
 	public Store() {
 	}
 
-	public int getStoreId() {
+	public byte getStoreId() {
 		return this.storeId;
 	}
 
-	public void setStoreId(int storeId) {
+	public void setStoreId(byte storeId) {
 		this.storeId = storeId;
 	}
 

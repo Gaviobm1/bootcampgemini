@@ -45,9 +45,6 @@ public class Film implements Serializable {
 	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	private BigDecimal replacementCost;
 
-	@Column(name="special_features")
-	private Object specialFeatures;
-
 	@Column(nullable=false, length=128)
 	private String title;
 
@@ -62,11 +59,11 @@ public class Film implements Serializable {
 	private Language languageVO;
 
 	//bi-directional many-to-one association to FilmActor
-	@OneToMany(mappedBy="film")
+	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmActor> filmActors;
 
 	//bi-directional many-to-one association to FilmCategory
-	@OneToMany(mappedBy="film")
+	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmCategory> filmCategories;
 
 	//bi-directional many-to-one association to Inventory
@@ -146,14 +143,6 @@ public class Film implements Serializable {
 
 	public void setReplacementCost(BigDecimal replacementCost) {
 		this.replacementCost = replacementCost;
-	}
-
-	public Object getSpecialFeatures() {
-		return this.specialFeatures;
-	}
-
-	public void setSpecialFeatures(Object specialFeatures) {
-		this.specialFeatures = specialFeatures;
 	}
 
 	public String getTitle() {

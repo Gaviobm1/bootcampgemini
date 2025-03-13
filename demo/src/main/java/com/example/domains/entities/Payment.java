@@ -25,7 +25,7 @@ public class Payment implements Serializable {
 	@Column(nullable=false, precision=10, scale=2)
 	private BigDecimal amount;
 
-	@Column(name="last_update", insertable=false, updatable=false)
+	@Column(name="last_update")
 	private Timestamp lastUpdate;
 
 	@Temporal(TemporalType.TIMESTAMP)
