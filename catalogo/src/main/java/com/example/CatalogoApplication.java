@@ -1,27 +1,28 @@
-package com.example.demo;
+package com.example;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.example.domains.contracts.services.FilmsService;
+
+import jakarta.transaction.Transactional;
 
 @SpringBootApplication
-@RestController
 public class CatalogoApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatalogoApplication.class, args);
 	}
 	
-	@GetMapping("/hello")
-	public String sayHello() {
-		return "Hi there!";
-	}
-
+	@Autowired
+	FilmsService srv;
+	
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
-		System.err.println("Applicación arrancada");
+		srv.getAll().forEach(System.err::println);
 	}
 
 }
