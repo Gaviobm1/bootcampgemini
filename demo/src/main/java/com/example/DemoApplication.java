@@ -6,7 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.domains.contracts.repositories.ActoresRepository;
+import com.example.domains.contracts.services.ActorsService;
 import com.example.util.Calculadora;
+
+import jakarta.transaction.Transactional;
 
 @SpringBootApplication
 //@ComponentScan(basePackages = "com.example.ioc")
@@ -18,6 +21,7 @@ public class DemoApplication implements CommandLineRunner {
 	}
 	
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
 		ejemplosDatos();
@@ -26,20 +30,34 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	private ActoresRepository dao;
 	
+	@Autowired
+	private ActorsService srv;
+	
 	private void ejemplosDatos() {
-		var item = dao.findById(198);
-		if(item.isPresent()) {
+//		var item = dao.findById(198);
+//		if(item.isPresent()) {
+//			var actor = item.get();
+//			actor.setFirstName("Pepito");
+//			actor.setLastName(actor.getLastName().toUpperCase());
+//			dao.save(actor);
+//		} else {
+//			System.err.println("no se ha encontrado el actor");
+//		}
+//		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 5))
+//		.forEach(System.err::println);
+//		srv.getAll().forEach(System.err::println);
+		var item = srv.getOne(1);
+		if (item.isPresent()) {
 			var actor = item.get();
-			actor.setFirstName("Pepito");
-			actor.setLastName(actor.getLastName().toUpperCase());
-			dao.save(actor);
+			System.err.println(item + "\nPeliculas:");
+			actor.getFilmActors().forEach(fa -> System.err.println(fa.getFilm().getTitle()));
 		} else {
-			System.err.println("no se ha encontrado el actor");
+			System.err.println("No se ha encontrado el actor");
 		}
-		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 5)).forEach(System.err::println);
+		
 	}
 	
-////	@Autowired //(required = false)
+////	@Autowired //(required = false)-
 ////	Servicio srv;
 //	
 //	@Autowired //(required = false)
