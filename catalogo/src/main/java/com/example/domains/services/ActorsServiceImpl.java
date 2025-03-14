@@ -3,14 +3,14 @@ package com.example.domains.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.ActoresRepository;
 import com.example.domains.contracts.services.ActorsService;
 import com.example.domains.entities.Actor;
+import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
+import com.example.exceptions.NotFoundException;
 
 @Service
 public class ActorsServiceImpl implements ActorsService {
@@ -47,21 +47,28 @@ public class ActorsServiceImpl implements ActorsService {
 		if (item == null) {
 			throw new InvalidDataException("El actor no pueded ser nulo");
 		}
-		
-		
-		return null;
+		if (!dao.existsById(item.getActorId())) {
+			throw new NotFoundException("El actor no existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
-	public void delete(Actor item) throws InvalidDataException {
+	public void delete(Actor item) throws NotFoundException, InvalidDataException {
 		if (item == null) {
 			throw new InvalidDataException("El actor no pueded ser nulo");
+		}
+		if (!dao.existsById(item.getActorId())) {
+			throw new NotFoundException("El actor no existe");
 		}
 		dao.delete(item);
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteById(Integer id) throws NotFoundException {
+		if (!dao.existsById(id)) {
+			throw new NotFoundException("El actor no existe");
+		}
 		dao.deleteById(id);
 	}
 
