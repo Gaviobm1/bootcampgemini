@@ -79,10 +79,6 @@ public class Film implements Serializable {
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmCategory> filmCategories;
 
-	//bi-directional many-to-one association to Inventory
-	@OneToMany(mappedBy="film")
-	private List<Inventory> inventories;
-
 	public Film() {
 	}
 
@@ -226,34 +222,9 @@ public class Film implements Serializable {
 		return filmCategory;
 	}
 
-	public List<Inventory> getInventories() {
-		return this.inventories;
-	}
-
-	public void setInventories(List<Inventory> inventories) {
-		this.inventories = inventories;
-	}
-
-	public Inventory addInventory(Inventory inventory) {
-		getInventories().add(inventory);
-		inventory.setFilm(this);
-
-		return inventory;
-	}
-
-	public Inventory removeInventory(Inventory inventory) {
-		getInventories().remove(inventory);
-		inventory.setFilm(null);
-
-		return inventory;
-	}
-	
-	
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, filmActors, filmCategories, filmId, inventories, language, languageVO,
-				lastUpdate, length, rating, releaseYear, rentalDuration, rentalRate, replacementCost, title);
+		return Objects.hash(filmId);
 	}
 
 	@Override
@@ -265,14 +236,7 @@ public class Film implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
-		return Objects.equals(description, other.description) && Objects.equals(filmActors, other.filmActors)
-				&& Objects.equals(filmCategories, other.filmCategories) && filmId == other.filmId
-				&& Objects.equals(inventories, other.inventories) && Objects.equals(language, other.language)
-				&& Objects.equals(languageVO, other.languageVO) && Objects.equals(lastUpdate, other.lastUpdate)
-				&& length == other.length && Objects.equals(rating, other.rating)
-				&& Objects.equals(releaseYear, other.releaseYear) && rentalDuration == other.rentalDuration
-				&& Objects.equals(rentalRate, other.rentalRate)
-				&& Objects.equals(replacementCost, other.replacementCost) && Objects.equals(title, other.title);
+		return filmId == other.filmId;
 	}
 
 	@Override
