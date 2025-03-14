@@ -41,31 +41,17 @@ class ActorsServiceImplTests {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		actores = new ArrayList<Actor>();
-		actores.add(new Actor(1, "Jacob", "Elordi"));
-		actores.add(new Actor(2, "Tom", "Holland"));
-		actores.add(new Actor(3, "Brian", "Alvarez"));
-		actores.add(new Actor(4, "Josha", "Stradowski"));
-		actores.add(new Actor(5, "Barry", "Keoghan"));
+		actores.add(new Actor(1, "JACOB", "ELORDI"));
+		actores.add(new Actor(2, "TOM", "HOLLAND"));
+		actores.add(new Actor(3, "BRIAN", "ALVAREZ"));
+		actores.add(new Actor(4, "JOSHA", "STRADOWSKI"));
+		actores.add(new Actor(5, "BARRY", "KEOGHAN"));
 	}
 	
 	@Nested
 	@DisplayName("Exceptions")
 	class ExceptionTests {
-		@Test
-		void addThrowsWhenActorNull() {
-			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(null));
-			assertEquals("El actor no pueded ser nulo", ex.getMessage());
-		}
 		
-		@ParameterizedTest(name="{index} => id: {0} -> \"El actor ya existe\"")
-		@CsvSource({"1", "3", "5"})
-		void addThrowsWhenActorExists(int id) {
-			when(repo.existsById(id)).thenReturn(true);
-			Actor actor = new Actor(id, "Jacob", "Elordi");
-			DuplicateKeyException  ex = assertThrows(DuplicateKeyException.class, () -> srv.add(actor));
-			assertEquals("El actor ya existe", ex.getMessage());
-			verify(repo).existsById(id);
-		}
 		
 		@Test
 		void modifyThrowsWhenActorNull() {
@@ -98,7 +84,43 @@ class ActorsServiceImplTests {
 	}
 	
 	@Nested
-	@DisplayName("Finds")
+	@DisplayName("add") 
+	class Add {
+		@Test
+		void addThrowsWhenActorNull() {
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(null));
+			assertEquals("El actor no pueded ser nulo", ex.getMessage());
+		}
+		
+		@ParameterizedTest(name="{index} => id: {0} -> \"El actor ya existe\"")
+		@CsvSource({"1", "3", "5"})
+		void addThrowsWhenActorExists(int id) {
+			when(repo.existsById(id)).thenReturn(true);
+			Actor actor = new Actor(id, "JACOB", "ELORDI");
+			DuplicateKeyException  ex = assertThrows(DuplicateKeyException.class, () -> srv.add(actor));
+			assertEquals("El actor ya existe", ex.getMessage());
+			verify(repo).existsById(id);
+		}
+		
+		@ParameterizedTest(name="{index} => id: {0} firstName: {1} lastName: {2} -> message: {3}")
+		@DisplayName("Validation")
+		@CsvSource({
+			"6, Phil, BROOKS, ERRORES: firstName: First name must be capitalized.",
+			"6, PHIL, Brooks, ERRORES: lastName: Last name must be capitalized.",
+			"6, , BROOKS, ERRORES: firstName: First name must not be blank.",
+			"6, PHIL, , ERRORES: lastName: Last name must not be blank.",
+			"6, P, BROOKS, ERRORES: firstName: First name must be between 2 and 45 characters.",
+			"6, PHIL, B, ERRORES: lastName: Last name must be between 2 and 45 characters.",
+			})
+		void throwsWhenValidationFails(int id, String firstName, String lastName, String message) {
+			Actor actor = new Actor(id, firstName, lastName);
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(actor));
+			assertEquals(message, ex.getMessage());
+		}
+	}
+	
+	@Nested
+	@DisplayName("find")
 	class Finds {
 		@Test
 		void findsAll() {
@@ -120,11 +142,5 @@ class ActorsServiceImplTests {
 			verify(repo).findById(id);
 		}
 	}
-
-	
-	
-	
-	
-	
 
 }

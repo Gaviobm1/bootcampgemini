@@ -36,11 +36,14 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	private int actorId;
 
 	@Column(name="first_name", nullable=false, length=45)
-	@NotBlank
-	@Size(max= 45, min= 2,  message = "Name must be between 2 and 45 characters")
-	@Pattern(regexp="^[A-Za-z]*$", message = "Names must be capitalized")
+	@NotBlank(message="First name must not be blank")
+	@Size(max= 45, min= 2,  message = "First name must be between 2 and 45 characters")
+	@Pattern(regexp="^[A-Z]*$", message = "First name must be capitalized")
 	private String firstName;
 
+	@NotBlank(message="Last name must not be blank")
+	@Size(max= 45, min= 2,  message = "Last name must be between 2 and 45 characters")
+	@Pattern(regexp="^[A-Z]*$", message = "Last name must be capitalized")
 	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
