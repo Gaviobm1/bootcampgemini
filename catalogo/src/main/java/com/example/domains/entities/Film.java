@@ -20,6 +20,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 
 /**
@@ -31,7 +36,7 @@ import jakarta.persistence.Table;
 @NamedQuery(name="Film.findAll", query="SELECT f FROM Film f")
 public class Film extends AbstractEntity<Film> implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="film_id", unique=true, nullable=false)
@@ -49,6 +54,9 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private String rating;
 
 	@Column(name="release_year")
+	@NotBlank(message="Release year must not be blank")
+	@Min(value = 1890, message="Release year cannot be before 1890")
+	@Max(value = 2100, message="Release year cannot be after 2100")
 	private Short releaseYear;
 
 	@Column(name="rental_duration", nullable=false)
@@ -61,6 +69,9 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private BigDecimal replacementCost;
 
 	@Column(nullable=false, length=128)
+	@NotBlank(message="Title must not be blank")
+	@Size(max= 45, min= 2,  message = "Title must be between 2 and 45 characters")
+	@Pattern(regexp="^[A-Z]*$", message = "Title must be capitalized")
 	private String title;
 
 	//bi-directional many-to-one association to Language
@@ -84,7 +95,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	public Film() {
 	}
 	
-	public Film(int filmId, Short releaseYear, String title) {
+	public Film(int filmId, String title, Short releaseYear) {
 		super();
 		this.filmId = filmId;
 		this.releaseYear = releaseYear;

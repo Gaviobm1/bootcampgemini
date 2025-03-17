@@ -48,7 +48,7 @@ public class ActorsServiceImpl implements ActorsService {
 	@Override
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
 		if (item == null) {
-			throw new InvalidDataException("El actor no pueded ser nulo");
+			throw new InvalidDataException("El actor no puede ser nulo");
 		}
 		if (!dao.existsById(item.getActorId())) {
 			throw new NotFoundException("El actor no existe");
