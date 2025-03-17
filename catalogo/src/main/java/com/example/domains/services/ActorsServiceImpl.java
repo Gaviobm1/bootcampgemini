@@ -11,6 +11,8 @@ import com.example.domains.entities.Actor;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ActorsServiceImpl implements ActorsService {
@@ -73,6 +75,13 @@ public class ActorsServiceImpl implements ActorsService {
 			throw new NotFoundException("El actor no existe");
 		}
 		dao.deleteById(id);
+	}
+
+	@Override
+	public String actorToJson(int id) throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		Optional<Actor> actor = dao.findById(id);
+		return objectMapper.writeValueAsString(actor);
 	}
 
 	@Override

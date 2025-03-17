@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.example.domains.core.entities.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,6 +52,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor
+	@JsonIgnore
 	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
 	private List<FilmActor> filmActors;
 

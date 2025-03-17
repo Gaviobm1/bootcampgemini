@@ -22,43 +22,37 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.example.domains.contracts.repositories.FilmsRepository;
 import com.example.domains.entities.Film;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 
+@DataJpaTest
+@ComponentScan(basePackages = "com.example")
 class FilmsServiceImplTest {
 	
-	@Mock 
+	@MockBean 
 	private FilmsRepository repo;
 	
-	@InjectMocks
+	@Autowired
 	private FilmsServiceImpl srv;
 	
 	private List<Film> films;
-
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
 
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 		films = new ArrayList<Film>();
-		films.add(new Film(1, "The Gorge", (short) 2025));
-		films.add(new Film(2, "The Parenting", (short) 2025));
-		films.add(new Film(3, "Gladiator II", (short) 2024));
-		films.add(new Film(4, "Deadpool and Wolverine", (short) 2024));
-		films.add(new Film(5, "Mulholland Drive", (short) 2001));
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
+		films.add(new Film(1, "THE GORGE", (short) 2025));
+		films.add(new Film(2, "THE PARENTING", (short) 2025));
+		films.add(new Film(3, "GLADIATOR II", (short) 2024));
+		films.add(new Film(4, "DEADPOOL AND WOLVERINE", (short) 2024));
+		films.add(new Film(5, "MULHOLLAND DRIVE", (short) 2001));
 	}
 
 	@Nested
@@ -73,9 +67,9 @@ class FilmsServiceImplTest {
 
 		@ParameterizedTest(name="{index} => id: {0} arrayListIndex: {1} -> {2}")
 		@CsvSource({
-			"1, 0, The Gorge", 
-			"2, 1, The Parenting",
-			"5, 4, Mulholland Drive"})
+			"1, 0, THE GORGE", 
+			"2, 1, THE PARENTING",
+			"5, 4, MULHOLLAND DRIVE"})
 		void testGetOne(int id, int arrayListIndex, String actor) {
 			when(repo.findById(anyInt())).thenReturn(Optional.of(films.get(arrayListIndex)));
 			Optional<Film> value = srv.getOne(id);
@@ -89,7 +83,7 @@ class FilmsServiceImplTest {
 	class Add {
 		@Test
 		void addsFilm() throws DuplicateKeyException, InvalidDataException {
-			Film film = new Film(6, "Eraserhead", (short) 1977);
+			Film film = new Film(6, "ERASERHEAD", (short) 1977);
 			when(repo.save(film)).thenReturn(film);
 			assertEquals(film, srv.add(film));
 			verify(repo).save(film);
@@ -105,7 +99,7 @@ class FilmsServiceImplTest {
 		@CsvSource({"1", "3", "5"})
 		void addThrowsWhenFilmExists(int id) {
 			when(repo.existsById(id)).thenReturn(true);
-			Film film = new Film(id, "Mulholland Drive", (short) 2001);
+			Film film = new Film(id, "MULHOLLAND DRIVE", (short) 2001);
 			DuplicateKeyException  ex = assertThrows(DuplicateKeyException.class, () -> srv.add(film));
 			assertEquals("El film ya existe", ex.getMessage());
 			verify(repo).existsById(id);

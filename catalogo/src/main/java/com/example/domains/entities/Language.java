@@ -47,6 +47,11 @@ public class Language implements Serializable {
 	public Language() {
 	}
 
+	public Language(int id, String name) {
+		this.languageId = id;
+		this.name = name;
+	}
+
 	public int getLanguageId() {
 		return this.languageId;
 	}
@@ -119,7 +124,7 @@ public class Language implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(films, filmsVO, languageId, lastUpdate, name);
+		return Objects.hash(languageId);
 	}
 
 	@Override
@@ -131,9 +136,7 @@ public class Language implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Language other = (Language) obj;
-		return Objects.equals(films, other.films) && Objects.equals(filmsVO, other.filmsVO)
-				&& languageId == other.languageId && Objects.equals(lastUpdate, other.lastUpdate)
-				&& Objects.equals(name, other.name);
+		return languageId == other.languageId;
 	}
 
 	@Override

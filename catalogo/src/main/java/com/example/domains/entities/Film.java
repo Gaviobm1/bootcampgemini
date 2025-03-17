@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.example.domains.core.entities.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,6 +24,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -54,7 +56,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private String rating;
 
 	@Column(name="release_year")
-	@NotBlank(message="Release year must not be blank")
+	@NotNull(message="Release year must not be null")
 	@Min(value = 1890, message="Release year cannot be before 1890")
 	@Max(value = 2100, message="Release year cannot be after 2100")
 	private Short releaseYear;
@@ -71,7 +73,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	@Column(nullable=false, length=128)
 	@NotBlank(message="Title must not be blank")
 	@Size(max= 45, min= 2,  message = "Title must be between 2 and 45 characters")
-	@Pattern(regexp="^[A-Z]*$", message = "Title must be capitalized")
+	@Pattern(regexp="^[A-Z\s]*$", message = "Title must be capitalized")
 	private String title;
 
 	//bi-directional many-to-one association to Language
@@ -85,6 +87,7 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private Language languageVO;
 
 	//bi-directional many-to-one association to FilmActor
+	@JsonIgnore
 	@OneToMany(mappedBy="film", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FilmActor> filmActors;
 
@@ -100,6 +103,17 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.filmId = filmId;
 		this.releaseYear = releaseYear;
 		this.title = title;
+	}
+
+	
+
+	public Film(int filmId, String title, String description, Short releaseYear, Language language, Language languageVO) {
+		this.filmId = filmId;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.language = language;
+		this.languageVO = languageVO;
 	}
 
 	public int getFilmId() {
