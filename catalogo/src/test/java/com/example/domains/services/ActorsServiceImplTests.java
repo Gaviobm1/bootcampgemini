@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.context.annotation.ComponentScan;
 
 
@@ -28,20 +28,21 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
-@DataJpaTest
+
 @ComponentScan(basePackages = "com.example")
 class ActorsServiceImplTests {
 	
-	@MockitoBean
+	@Mock
 	private ActoresRepository repo;
 	
-	@Autowired
+	@InjectMocks
 	private ActorsServiceImpl srv;
 	
 	private List<Actor> actores;
 	
 	@BeforeEach
 	void setUp() {
+		MockitoAnnotations.openMocks(this);
 		actores = new ArrayList<Actor>();
 		actores.add(new Actor(1, "JACOB", "ELORDI"));
 		actores.add(new Actor(2, "TOM", "HOLLAND"));

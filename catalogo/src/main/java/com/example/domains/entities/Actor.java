@@ -48,7 +48,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@Column(name="last_update", /*insertable=false,*/ updatable=false, nullable=false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to FilmActor

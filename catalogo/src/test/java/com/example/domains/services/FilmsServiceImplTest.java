@@ -17,10 +17,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.example.domains.contracts.repositories.FilmsRepository;
@@ -29,14 +28,14 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
-@DataJpaTest
+
 @ComponentScan(basePackages = "com.example")
 class FilmsServiceImplTest {
 	
-	@MockitoBean 
+	@Mock 
 	private FilmsRepository repo;
 	
-	@Autowired
+	@InjectMocks
 	private FilmsServiceImpl srv;
 	
 	private List<Film> films;
