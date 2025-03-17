@@ -2,6 +2,7 @@ package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -48,80 +49,9 @@ class ActorsServiceImplTests {
 		actores.add(new Actor(5, "BARRY", "KEOGHAN"));
 	}
 	
-	@Nested
-	@DisplayName("Exceptions")
-	class ExceptionTests {
-		
-		
-		@Test
-		void modifyThrowsWhenActorNull() {
-			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.modify(null));
-			assertEquals("El actor no pueded ser nulo", ex.getMessage());
-		}
-		
-		@Test
-		void deleteThrowsWhenActorNull() {
-			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.delete(null));
-			assertEquals("El actor no pueded ser nulo", ex.getMessage());
-		}
-		
-		@Test
-		void deleteThrowsWhenActorNotExist() {
-			when(repo.existsById(6)).thenReturn(false);
-			Actor actor = new Actor(6, "Daryl", "McCormack");
-			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.delete(actor));
-			assertEquals("El actor no existe", ex.getMessage());
-			verify(repo).existsById(6);
-		}
-		
-		@Test
-		void deleteByIdThrowsWhenActorNotExist() {
-			when(repo.existsById(6)).thenReturn(false);
-			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.deleteById(6));
-			assertEquals("El actor no existe", ex.getMessage());
-			verify(repo).existsById(6);
-		}
-	}
 	
 	@Nested
-	@DisplayName("add") 
-	class Add {
-		@Test
-		void addThrowsWhenActorNull() {
-			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(null));
-			assertEquals("El actor no pueded ser nulo", ex.getMessage());
-		}
-		
-		@ParameterizedTest(name="{index} => id: {0} -> \"El actor ya existe\"")
-		@CsvSource({"1", "3", "5"})
-		void addThrowsWhenActorExists(int id) {
-			when(repo.existsById(id)).thenReturn(true);
-			Actor actor = new Actor(id, "JACOB", "ELORDI");
-			DuplicateKeyException  ex = assertThrows(DuplicateKeyException.class, () -> srv.add(actor));
-			assertEquals("El actor ya existe", ex.getMessage());
-			verify(repo).existsById(id);
-		}
-		
-		@ParameterizedTest(name="{index} => id: {0} firstName: {1} lastName: {2} -> message: {3}")
-		@DisplayName("Validation")
-		@CsvSource({
-			"6, Phil, BROOKS, ERRORES: firstName: First name must be capitalized.",
-			"6, PHIL, Brooks, ERRORES: lastName: Last name must be capitalized.",
-			"6, , BROOKS, ERRORES: firstName: First name must not be blank.",
-			"6, PHIL, , ERRORES: lastName: Last name must not be blank.",
-			"6, P, BROOKS, ERRORES: firstName: First name must be between 2 and 45 characters.",
-			"6, PHIL, B, ERRORES: lastName: Last name must be between 2 and 45 characters.",
-			})
-		void throwsWhenValidationFails(int id, String firstName, String lastName, String message) {
-			Actor actor = new Actor(id, firstName, lastName);
-			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(actor));
-			assertEquals(message, ex.getMessage());
-		}
-	}
-	
-	@Nested
-	@DisplayName("find")
-	class Finds {
+	class Find {
 		@Test
 		void findsAll() {
 			when(repo.findAll()).thenReturn(actores);
@@ -142,5 +72,113 @@ class ActorsServiceImplTests {
 			verify(repo).findById(id);
 		}
 	}
+	
+	@Nested
+	class Add {
+		@Test
+		void addsActor() throws DuplicateKeyException, InvalidDataException {
+			Actor actor = new Actor(6, "DARYL", "MCCORMACK");
+			when(repo.save(actor)).thenReturn(actor);
+			assertEquals(actor, srv.add(actor));
+			verify(repo).save(actor);
+		}
+		
+		@Test
+		void addThrowsWhenActorNull() {
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(null));
+			assertEquals("El actor no puede ser nulo", ex.getMessage());
+		}
+		
+		@ParameterizedTest(name="{index} => id: {0} -> \"El actor ya existe\"")
+		@CsvSource({"1", "3", "5"})
+		void addThrowsWhenActorExists(int id) {
+			when(repo.existsById(id)).thenReturn(true);
+			Actor actor = new Actor(id, "JACOB", "ELORDI");
+			DuplicateKeyException  ex = assertThrows(DuplicateKeyException.class, () -> srv.add(actor));
+			assertEquals("El actor ya existe", ex.getMessage());
+			verify(repo).existsById(id);
+		}
+		
+		@ParameterizedTest(name="{index} => id: {0} firstName: {1} lastName: {2} -> message: {3}")
+		@DisplayName("Name validation")
+		@CsvSource({
+			"6, Phil, BROOKS, ERRORES: firstName: First name must be capitalized.",
+			"6, PHIL, Brooks, ERRORES: lastName: Last name must be capitalized.",
+			"6, , BROOKS, ERRORES: firstName: First name must not be blank.",
+			"6, PHIL, , ERRORES: lastName: Last name must not be blank.",
+			"6, P, BROOKS, ERRORES: firstName: First name must be between 2 and 45 characters.",
+			"6, PHIL, B, ERRORES: lastName: Last name must be between 2 and 45 characters.",
+			})
+		void throwsWhenNameValidationFails(int id, String firstName, String lastName, String message) {
+			Actor actor = new Actor(id, firstName, lastName);
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.add(actor));
+			assertEquals(message, ex.getMessage());
+		}
+	}
+	
+	@Nested
+	class Modify {
+		
+		@Test
+		void modifiesActor() throws NotFoundException, InvalidDataException {
+			Actor actor = actores.get(0);
+			when(repo.save(actor)).thenReturn(actor);
+			when(repo.existsById(actor.getActorId())).thenReturn(true);
+			assertEquals(actor, srv.modify(actor));
+			verify(repo).save(actor);
+		}
+		
+		@Test
+		void modifyThrowsWhenActorNoExist() {
+			Actor actor = new Actor(6, "DARYL", "MCCORMACK");
+			when(repo.existsById(6)).thenReturn(false);
+			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.modify(actor));
+			assertEquals("El actor no existe", ex.getMessage());
+			verify(repo).existsById(6);
+		}
+		
+		@Test
+		void modifyThrowsWhenActorNull() {
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.modify(null));
+			assertEquals("El actor no puede ser nulo", ex.getMessage());
+		}
+	}
+	
+	@Nested
+	class Delete {
+		@Test
+		void deletesActor() throws NotFoundException, InvalidDataException {
+			Actor actor = actores.get(0);
+			when(repo.existsById(actor.getActorId())).thenReturn(true);
+			doNothing().when(repo).delete(actor);
+			srv.delete(actor);
+			verify(repo).existsById(actor.getActorId());
+		}
+		
+		@Test
+		void deleteThrowsWhenActorNull() {
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.delete(null));
+			assertEquals("El actor no pueded ser nulo", ex.getMessage());
+		}
+		
+		@Test
+		void deleteThrowsWhenActorNotExist() {
+			when(repo.existsById(6)).thenReturn(false);
+			Actor actor = new Actor(6, "DARYL", "MCCORMACK");
+			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.delete(actor));
+			assertEquals("El actor no existe", ex.getMessage());
+			verify(repo).existsById(6);
+		}
+		
+		@Test
+		void deleteByIdThrowsWhenActorNotExist() {
+			when(repo.existsById(6)).thenReturn(false);
+			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.deleteById(6));
+			assertEquals("El actor no existe", ex.getMessage());
+			verify(repo).existsById(6);
+		}
+	}
+	
+	
 
 }

@@ -34,7 +34,7 @@ public class ActorsServiceImpl implements ActorsService {
 	@Override
 	public Actor add(Actor item) throws DuplicateKeyException, InvalidDataException {
 		if (item == null) {
-			throw new InvalidDataException("El actor no pueded ser nulo");
+			throw new InvalidDataException("El actor no puede ser nulo");
 		}
 		if (item.isInvalid()) {
 			throw new InvalidDataException(item.getErrorsMessage());

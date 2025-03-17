@@ -28,32 +28,51 @@ public class FilmsServiceImpl implements FilmsService {
 
 	@Override
 	public Optional<Film> getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return dao.findById(id);
 	}
 
 	@Override
 	public Film add(Film item) throws DuplicateKeyException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if (item == null) {
+			throw new InvalidDataException("El film no puede ser nulo");
+		}
+		if (item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if (item.getFilmId() > 0 && dao.existsById(item.getFilmId())) {
+			throw new DuplicateKeyException("El film ya existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public Film modify(Film item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if (item == null) {
+			throw new InvalidDataException("El film no puede ser nulo");
+		}
+		if (!dao.existsById(item.getFilmId())) {
+			throw new NotFoundException("El film no existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
-	public void delete(Film item) throws InvalidDataException {
-		// TODO Auto-generated method stub
-		
+	public void delete(Film item) throws InvalidDataException, NotFoundException {
+		if (item == null) {
+			throw new InvalidDataException("El actor no pueded ser nulo");
+		}
+		if (!dao.existsById(item.getFilmId())) {
+			throw new NotFoundException("El film no existe");
+		}
+		dao.delete(item);	
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+	public void deleteById(Integer id) throws NotFoundException {
+		if (!dao.existsById(id)) {
+			throw new NotFoundException("El film no existe");
+		}
+		dao.deleteById(id);
 	}
 
 	

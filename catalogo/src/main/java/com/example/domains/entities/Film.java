@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+import com.example.domains.core.entities.AbstractEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +29,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="film")
 @NamedQuery(name="Film.findAll", query="SELECT f FROM Film f")
-public class Film implements Serializable {
+public class Film extends AbstractEntity<Film> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -80,6 +82,13 @@ public class Film implements Serializable {
 	private List<FilmCategory> filmCategories;
 
 	public Film() {
+	}
+	
+	public Film(int filmId, Short releaseYear, String title) {
+		super();
+		this.filmId = filmId;
+		this.releaseYear = releaseYear;
+		this.title = title;
 	}
 
 	public int getFilmId() {
