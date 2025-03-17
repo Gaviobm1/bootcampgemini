@@ -59,7 +59,7 @@ public class FilmsServiceImpl implements FilmsService {
 	@Override
 	public void delete(Film item) throws InvalidDataException, NotFoundException {
 		if (item == null) {
-			throw new InvalidDataException("El actor no pueded ser nulo");
+			throw new InvalidDataException("El film no puede ser nulo");
 		}
 		if (!dao.existsById(item.getFilmId())) {
 			throw new NotFoundException("El film no existe");

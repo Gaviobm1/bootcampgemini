@@ -2,8 +2,8 @@ package com.example.domains.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,16 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -31,6 +27,7 @@ import com.example.domains.contracts.repositories.FilmsRepository;
 import com.example.domains.entities.Film;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
+import com.example.exceptions.NotFoundException;
 
 @DataJpaTest
 @ComponentScan(basePackages = "com.example")
@@ -110,8 +107,27 @@ class FilmsServiceImplTest {
 	@Nested
 	class Modify {
 		@Test
-		void testModify() {
-			fail("Not yet implemented");
+		void modifiesFilm() throws NotFoundException, InvalidDataException {
+			Film film = films.get(0);
+			when(repo.save(film)).thenReturn(film);
+			when(repo.existsById(film.getFilmId())).thenReturn(true);
+			assertEquals(film, srv.modify(film));
+			verify(repo).save(film);
+		}
+		
+		@Test
+		void modifyThrowsWhenFilmNoExist() {
+			Film film = new Film(6, "The Man Who Laughs", (short) 1928);
+			when(repo.existsById(6)).thenReturn(false);
+			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.modify(film));
+			assertEquals("El film no existe", ex.getMessage());
+			verify(repo).existsById(6);
+		}
+		
+		@Test
+		void modifyThrowsWhenFilmNull() {
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.modify(null));
+			assertEquals("El film no puede ser nulo", ex.getMessage());
 		}
 	}
 
@@ -119,15 +135,35 @@ class FilmsServiceImplTest {
 	@Nested 
 	class Delete {
 		@Test
-		void testDelete() {
-			fail("Not yet implemented");
+		void deletesFilm() throws NotFoundException, InvalidDataException {
+			Film film = films.get(0);
+			when(repo.existsById(film.getFilmId())).thenReturn(true);
+			doNothing().when(repo).delete(film);
+			srv.delete(film);
+			verify(repo).existsById(film.getFilmId());
 		}
-
+		
 		@Test
-		void testDeleteById() {
-			fail("Not yet implemented");
+		void deleteThrowsWhenFilmNull() {
+			InvalidDataException ex = assertThrows(InvalidDataException.class, () -> srv.delete(null));
+			assertEquals("El film no puede ser nulo", ex.getMessage());
+		}
+		
+		@Test
+		void deleteThrowsWhenActorNotExist() {
+			when(repo.existsById(6)).thenReturn(false);
+			Film film = new Film(6, "The Man Who Laughs", (short) 1928);
+			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.delete(film));
+			assertEquals("El film no existe", ex.getMessage());
+			verify(repo).existsById(6);
+		}
+		
+		@Test
+		void deleteByIdThrowsWhenActorNotExist() {
+			when(repo.existsById(6)).thenReturn(false);
+			NotFoundException ex = assertThrows(NotFoundException.class, () -> srv.deleteById(6));
+			assertEquals("El film no existe", ex.getMessage());
+			verify(repo).existsById(6);
 		}
 	}
-	
-
 }
