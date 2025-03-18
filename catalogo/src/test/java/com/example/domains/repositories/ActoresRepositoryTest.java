@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.example.domains.contracts.repositories.ActoresRepository;
 import com.example.domains.entities.Actor;
+import com.example.domains.entities.dtos.ActorDTO;
 
 
 @DataJpaTest
@@ -51,6 +52,12 @@ public class ActoresRepositoryTest {
     @Test
     public void testGetAll() {
         List<Actor> value = repo.findAll();
+        assertEquals(3, value.size());
+    }
+
+    @Test
+    public void testGetAllDTO() {
+        List<ActorDTO> value = repo.findAll(ActorDTO.class);
         assertEquals(3, value.size());
     }
 

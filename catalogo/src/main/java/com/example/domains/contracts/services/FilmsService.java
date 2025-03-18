@@ -1,8 +1,12 @@
 package com.example.domains.contracts.services;
 
-import com.example.domains.core.contracts.services.DomainService;
+import java.sql.Timestamp;
+import java.util.List;
+
+import com.example.domains.core.contracts.services.ProjectionDomainService;
+import com.example.domains.core.contracts.services.SpecificationDomainService;
 import com.example.domains.entities.Film;
 
-public interface FilmsService extends DomainService<Film, Integer> {
-
+public interface FilmsService extends ProjectionDomainService<Film, Integer>, SpecificationDomainService<Film, Integer> {
+    List<Film> novedades(Timestamp fecha);
 }

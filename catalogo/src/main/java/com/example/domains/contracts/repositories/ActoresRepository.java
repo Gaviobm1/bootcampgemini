@@ -1,30 +1,29 @@
 package com.example.domains.contracts.repositories;
 
+import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.example.domains.core.contracts.repositories.ProjectionsAndSpecificationJpaRepository;
+
 
 import com.example.domains.entities.Actor;
+import com.example.exceptions.DuplicateKeyException;
+import com.example.exceptions.NotFoundException;
 
 
-public interface ActoresRepository extends JpaRepository<Actor, Integer> {
+public interface ActoresRepository extends ProjectionsAndSpecificationJpaRepository<Actor, Integer> {
 
-	List<Actor> queryByFirstNameStartingWithIgnoreCase(String prefijo);
+	List<Actor> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Timestamp fecha);
 	
-	List<Actor> findTop5ByFirstNameStartingWith(
-			String prefijo,
-			Sort orderBy);
+	default Actor insert(Actor item) throws DuplicateKeyException {
+		if(existsById(item.getActorId()))
+			throw new DuplicateKeyException();
+		return save(item);
+	}
 	
-	List<Actor> findByActorIdGreaterThan(int id);
-	
-	@Query(value = "SELECT a FROM Actor a WHERE a.actorId > ?1")
-	List<Actor> findNovedadesJPQL(int id);
-	
-	@Query(value = "SELECT * FROM actor a WHERE a.actor_id > :id", nativeQuery = true)
-	List<Actor> findNovedadesSQL(int id);
-	
-	List<Actor> findAll(Specification<Actor> spec);
+	default Actor update(Actor item) throws NotFoundException {
+		if(!existsById(item.getActorId()))
+			throw new NotFoundException();
+		return save(item);
+	}
 }

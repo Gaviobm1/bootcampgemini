@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.example.domains.core.entities.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
-public class Category implements Serializable {
+public class Category extends AbstractEntity<Category> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -39,6 +40,10 @@ public class Category implements Serializable {
 	private List<FilmCategory> filmCategories;
 
 	public Category() {
+	}
+
+	public Category(int categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public Category(int categoryId, String name){

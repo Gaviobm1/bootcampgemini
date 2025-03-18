@@ -1,8 +1,12 @@
 package com.example.domains.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.ActoresRepository;
@@ -11,8 +15,7 @@ import com.example.domains.entities.Actor;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @Service
 public class ActorsServiceImpl implements ActorsService {
@@ -21,6 +24,30 @@ public class ActorsServiceImpl implements ActorsService {
 	
 	public ActorsServiceImpl(ActoresRepository dao) {
 		this.dao = dao;
+	}
+
+	@Override
+	public <T> List<T> getByProjection(Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+		return dao.findAllBy(pageable, type);
+	}
+
+	@Override
+	public Iterable<Actor> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	public Page<Actor> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
 	}
 
 	@Override
@@ -44,7 +71,7 @@ public class ActorsServiceImpl implements ActorsService {
 		if (item.getActorId() > 0 && dao.existsById(item.getActorId())) {
 			throw new DuplicateKeyException("El actor ya existe");
 		}
-		return dao.save(item);
+		return dao.insert(item);
 	}
 
 	@Override
@@ -77,17 +104,15 @@ public class ActorsServiceImpl implements ActorsService {
 		dao.deleteById(id);
 	}
 
-	@Override
-	public String actorToJson(int id) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		Optional<Actor> actor = dao.findById(id);
-		return objectMapper.writeValueAsString(actor);
-	}
 
 	@Override
 	public void repartePremios() {
 		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public List<Actor> novedades(Timestamp fecha) {
+		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
 	}
 
 }

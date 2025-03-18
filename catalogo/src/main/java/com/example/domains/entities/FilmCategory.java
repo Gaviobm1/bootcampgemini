@@ -34,6 +34,12 @@ public class FilmCategory implements Serializable {
 	public FilmCategory() {
 	}
 
+	public FilmCategory(Film film, Category category) {
+		this.film = film;
+		this.category = category;
+		this.id = new FilmCategoryPK(film.getFilmId(), category.getCategoryId());
+	}
+
 	public FilmCategoryPK getId() {
 		return this.id;
 	}
@@ -64,6 +70,15 @@ public class FilmCategory implements Serializable {
 
 	public void setFilm(Film film) {
 		this.film = film;
+	}
+
+	@PrePersist
+	@PreUpdate
+	void prePersiste() {
+//		System.err.println("prePersiste(): Bug Hibernate");
+		if (id == null) {
+			setId(new FilmCategoryPK(film.getFilmId(), category.getCategoryId()));
+		}
 	}
 
 }

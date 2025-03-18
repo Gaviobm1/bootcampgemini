@@ -1,9 +1,11 @@
 package com.example.domains.contracts.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.sql.Timestamp;
+import java.util.List;
 
+import com.example.domains.core.contracts.repositories.ProjectionsAndSpecificationJpaRepository;
 import com.example.domains.entities.Film;
 
-public interface FilmsRepository extends JpaRepository<Film, Integer> {
-
+public interface FilmsRepository extends ProjectionsAndSpecificationJpaRepository<Film, Integer> {
+    List<Film> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Timestamp fecha);
 }

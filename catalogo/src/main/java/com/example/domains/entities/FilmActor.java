@@ -34,6 +34,12 @@ public class FilmActor implements Serializable {
 	public FilmActor() {
 	}
 
+	public FilmActor(Film film, Actor actor) {
+		this.id = new FilmActorPK(film.getFilmId(), actor.getActorId());
+		this.film = film;
+		this.actor = actor;
+	}
+
 	public FilmActorPK getId() {
 		return this.id;
 	}
@@ -64,6 +70,15 @@ public class FilmActor implements Serializable {
 
 	public void setFilm(Film film) {
 		this.film = film;
+	}
+
+	@PrePersist 
+	@PreUpdate
+	void prePersiste() {
+//		System.err.println("prePersiste(): Bug Hibernate");
+		if (id == null) {
+			setId(new FilmActorPK(film.getFilmId(), actor.getActorId()));
+		}
 	}
 
 }
