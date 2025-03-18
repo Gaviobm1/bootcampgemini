@@ -19,7 +19,7 @@ public class CatalogoApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		dao.queryByActorIdGreaterThan(100).forEach(System.err::println);;
+		System.out.println("Arrancada...");
 	}
 
 }

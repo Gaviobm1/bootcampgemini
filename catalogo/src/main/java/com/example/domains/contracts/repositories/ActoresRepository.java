@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.domains.entities.Actor;
-import com.example.domains.entities.dtos.ActorShort;
+
 
 public interface ActoresRepository extends JpaRepository<Actor, Integer> {
 
@@ -19,8 +19,6 @@ public interface ActoresRepository extends JpaRepository<Actor, Integer> {
 			Sort orderBy);
 	
 	List<Actor> findByActorIdGreaterThan(int id);
-	
-	List<ActorShort> queryByActorIdGreaterThan(int id);
 	
 	@Query(value = "SELECT a FROM Actor a WHERE a.actorId > ?1")
 	List<Actor> findNovedadesJPQL(int id);
