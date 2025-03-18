@@ -3,12 +3,14 @@ package com.example.batch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
 import com.example.models.Persona;
 import com.example.models.PersonaDTO;
 
-public class PersonalItemProcessor implements ItemProcessor<PersonaDTO, Persona> {
-    private static final Logger log = LoggerFactory.getLogger(PersonalItemProcessor.class);
+@Component
+public class PersonaItemProcessor implements ItemProcessor<PersonaDTO, Persona> {
+    private static final Logger log = LoggerFactory.getLogger(PersonaItemProcessor.class);
 
     @Override
     public Persona process(PersonaDTO item) throws Exception {
