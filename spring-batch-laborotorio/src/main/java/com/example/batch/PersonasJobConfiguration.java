@@ -1,4 +1,5 @@
 package com.example.batch;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
@@ -37,7 +39,11 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 import com.example.models.Persona;
 import com.example.models.PersonaDTO;
+import com.example.models.PhotoDTO;
+import com.example.models.PhotoRestItemReader;
 import com.thoughtworks.xstream.security.AnyTypePermission;
+import org.springframework.batch.item.file.FlatFileHeaderCallback;
+import java.io.Writer;
 
 @Configuration
 public class PersonasJobConfiguration {
@@ -212,5 +218,27 @@ public class PersonasJobConfiguration {
             .listener(listener)
             .start(copyFilesInDir)
             .build();
+    }
+
+    @Autowired private PhotoRestItemReader photoRestItemReader;
+
+    @Bean
+    Step photoStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+        String[] headers = new String[] { "id", "author", "width", "height", "url", "download_url" };
+        return new StepBuilder("photoStep1", jobRepository)
+            .<PhotoDTO, PhotoDTO>chunk(100, transactionManager).reader(photoRestItemReader)
+            .writer(new FlatFileItemWriterBuilder<PhotoDTO>().name("photoCSVItemWriter")
+                .resource(new FileSystemResource("output/photoData.csv"))
+                .headerCallback(new FlatFileHeaderCallback() {
+                    public void writeHeader(Writer writer) throws IOException {
+                        writer.write(String.join(",", headers));
+                }}).lineAggregator(new DelimitedLineAggregator<PhotoDTO>() {{
+                        setDelimiter(",");
+                        setFieldExtractor(new BeanWrapperFieldExtractor<PhotoDTO>() {{
+                            setNames(headers);
+                        }
+                    });
+            }}).build())
+    .build();
     }
 }
