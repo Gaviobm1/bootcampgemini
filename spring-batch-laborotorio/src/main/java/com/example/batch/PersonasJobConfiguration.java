@@ -137,7 +137,7 @@ public class PersonasJobConfiguration {
 */
     public StaxEventItemReader<PersonaDTO> personaXMLItemReader() {
         XStreamMarshaller marshaller = new XStreamMarshaller();
-        Map<String, Class> aliases = new HashMap<>();
+        Map<String, Class<PersonaDTO>> aliases = new HashMap<>();
         aliases.put("Persona", PersonaDTO.class);
         marshaller.setAliases(aliases);
         marshaller.setTypePermissions(AnyTypePermission.ANY);
@@ -159,7 +159,7 @@ public class PersonasJobConfiguration {
 
     public StaxEventItemWriter<Persona> personaXMLItemWriter() {
         XStreamMarshaller marshaller = new XStreamMarshaller();
-        Map<String, Class> aliases = new HashMap<>();
+        Map<String, Class<Persona>> aliases = new HashMap<>();
         aliases.put("Persona", Persona.class);
         marshaller.setAliases(aliases);
         return new StaxEventItemWriterBuilder<Persona>()
