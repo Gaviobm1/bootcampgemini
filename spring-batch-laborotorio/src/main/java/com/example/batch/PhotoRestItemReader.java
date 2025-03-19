@@ -1,4 +1,4 @@
-package com.example.models;
+package com.example.batch;
 
 import java.util.Iterator;
 
@@ -9,9 +9,13 @@ import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.example.models.PhotoDTO;
+import com.example.proxies.PhotoProxy;
+
 @Component
 public class PhotoRestItemReader implements ItemReader<PhotoDTO>, ItemStream {
     private Iterator<PhotoDTO> cache;
+    
     @Autowired
     private PhotoProxy srv;
 
