@@ -3,6 +3,8 @@ package com.example.domains.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.ActoresRepository;
@@ -29,6 +31,10 @@ public class ActorsServiceImpl implements ActorsService {
 
 	public List<ActorDTO> getByProjection(Class<ActorDTO> projection) {
 		return dao.findAllBy(ActorDTO.class);
+	}
+
+	public Page<ActorDTO> getByProjection(Pageable pageable, Class<ActorDTO> projection) {
+		return dao.findAllBy(pageable, ActorDTO.class);
 	}
 
 	@Override

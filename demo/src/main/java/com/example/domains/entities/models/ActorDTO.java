@@ -1,15 +1,28 @@
 package com.example.domains.entities.models;
 
 import com.example.domains.entities.Actor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@Schema(name="Actor", description = "Datos del actor")
 @Data @AllArgsConstructor
 public class ActorDTO {
 
+	@JsonProperty("id")
+	@Schema(description = "Identificador del actor", example = "437644")
 	private int actorId;
+	@NotBlank
+	@Size(min = 2, max = 45)
+	@Schema(description = "Nombre del actor", example = "Daryl")
 	private String firstName;
+	@NotBlank
+	@Size(min = 2, max = 45)
+	@Schema(description = "Apellido del actor", example = "McCormack")
 	private String lastName;
 	
 	public static ActorDTO from(Actor source) {
