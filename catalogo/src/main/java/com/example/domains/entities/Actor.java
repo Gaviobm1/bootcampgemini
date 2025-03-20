@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.example.domains.core.entities.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,7 +56,7 @@ public class Actor extends AbstractEntity<Actor> implements Serializable {
 
 	//bi-directional many-to-one association to FilmActor
 	@JsonIgnore
-	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="actor", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<FilmActor> filmActors;
 
 	public Actor() {
