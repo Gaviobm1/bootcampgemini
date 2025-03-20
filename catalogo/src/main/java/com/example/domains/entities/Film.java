@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import com.example.domains.core.entities.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.CascadeType;
