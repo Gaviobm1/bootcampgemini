@@ -1,18 +1,12 @@
 package com.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.domains.contracts.repositories.ActoresRepository;
-import com.example.domains.contracts.services.ActorsService;
-import com.example.util.Calculadora;
-
 import jakarta.transaction.Transactional;
 
 @SpringBootApplication
-//@ComponentScan(basePackages = "com.example.ioc")
 public class DemoApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
@@ -24,16 +18,11 @@ public class DemoApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
-		ejemplosDatos();
 	}
 	
-	@Autowired
-	private ActoresRepository dao;
+
 	
-	@Autowired
-	private ActorsService srv;
-	
-	private void ejemplosDatos() {
+
 //		var item = dao.findById(198);
 //		if(item.isPresent()) {
 //			var actor = item.get();
@@ -46,16 +35,7 @@ public class DemoApplication implements CommandLineRunner {
 //		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 5))
 //		.forEach(System.err::println);
 //		srv.getAll().forEach(System.err::println);
-		var item = srv.getOne(1);
-		if (item.isPresent()) {
-			var actor = item.get();
-			System.err.println(item + "\nPeliculas:");
-			actor.getFilmActors().forEach(fa -> System.err.println(fa.getFilm().getTitle()));
-		} else {
-			System.err.println("No se ha encontrado el actor");
-		}
-		
-	}
+	
 	
 ////	@Autowired //(required = false)-
 ////	Servicio srv;
@@ -87,10 +67,6 @@ public class DemoApplication implements CommandLineRunner {
 //		System.err.println("Rango: " + rango);
 //	}
 	
-	private void ejemplosPruebas() {
-		var calc = new Calculadora();
-		System.err.println("Suma: " + calc.suma(2, 3));
-	}
 	
 //	@Bean
 //  	CommandLineRunner demo() {
