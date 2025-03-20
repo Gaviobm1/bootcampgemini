@@ -82,7 +82,7 @@ public class ActorsServiceImpl implements ActorsService {
 		if (!dao.existsById(item.getActorId())) {
 			throw new NotFoundException("El actor no existe");
 		}
-		return dao.save(item);
+		return dao.update(item);
 	}
 
 	@Override

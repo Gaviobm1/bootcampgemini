@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.CategorysRepository;
 import com.example.domains.contracts.services.CategorysService;
@@ -12,7 +13,9 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+@Service
 public class CategorysServiceImpl implements CategorysService {
+
     private CategorysRepository dao;
 
 	public CategorysServiceImpl(CategorysRepository dao) {

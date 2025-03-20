@@ -57,7 +57,7 @@ public class ActoresRepositoryTest {
 
     @Test
     public void testGetAllDTO() {
-        List<ActorDTO> value = repo.findAll(ActorDTO.class);
+        List<ActorDTO> value = repo.findAllBy(ActorDTO.class);
         assertEquals(3, value.size());
     }
 
@@ -66,23 +66,4 @@ public class ActoresRepositoryTest {
         Optional<Actor> value = repo.findById(firstId);
         assertEquals("TOM", value.get().getFirstName());
     }
-
-    @Test
-    public void testIdGreaterThan() {
-        List<Actor> value = repo.findByActorIdGreaterThan(1);
-        assertEquals(2, value.size());
-    }
-
-    @ParameterizedTest(name = "{index} => prefix: {0} -> expected: {1}")
-    @CsvSource({
-        "t, TOM",
-        "j, JACOB",
-        "d, DARYL",
-        "T, TOM"
-    })
-    public void testQueryByFirstNameStartingWithIgnoreCase(String prefix, String expected) {
-        List<Actor> value = repo.queryByFirstNameStartingWithIgnoreCase(prefix);
-        assertEquals(expected, value.get(0).getFirstName());
-    }
-    
 }

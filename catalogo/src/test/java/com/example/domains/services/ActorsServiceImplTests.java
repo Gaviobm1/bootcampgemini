@@ -80,9 +80,9 @@ class ActorsServiceImplTests {
 		@Test
 		void addsActor() throws DuplicateKeyException, InvalidDataException {
 			Actor actor = new Actor(6, "DARYL", "MCCORMACK");
-			when(repo.save(actor)).thenReturn(actor);
+			when(repo.insert(actor)).thenReturn(actor);
 			assertEquals(actor, srv.add(actor));
-			verify(repo).save(actor);
+			verify(repo).insert(actor);
 		}
 		
 		@Test
@@ -124,10 +124,10 @@ class ActorsServiceImplTests {
 		@Test
 		void modifiesActor() throws NotFoundException, InvalidDataException {
 			Actor actor = actores.get(0);
-			when(repo.save(actor)).thenReturn(actor);
+			when(repo.update(actor)).thenReturn(actor);
 			when(repo.existsById(actor.getActorId())).thenReturn(true);
 			assertEquals(actor, srv.modify(actor));
-			verify(repo).save(actor);
+			verify(repo).update(actor);
 		}
 		
 		@Test

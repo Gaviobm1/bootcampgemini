@@ -28,8 +28,8 @@ public class FilmTest {
         film.setReplacementCost(BigDecimal.valueOf(19.99));
         film.setLanguage(new Language(1, "English"));
         film.setLanguageVO(new Language(2, "Spanish"));
-        film.setFilmActors(new ArrayList<>());
-        film.setFilmCategories(new ArrayList<>());
+        film.setActors(new ArrayList<>());
+        film.setCategories(new ArrayList<>());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class FilmTest {
 
     @Test
     public void testFilmCategories() {
-        assertNotNull(film.getFilmCategories());
-        assertTrue(film.getFilmCategories().isEmpty());
+        assertNotNull(film.getCategories());
+        assertTrue(film.getCategories().isEmpty());
     }
 }
