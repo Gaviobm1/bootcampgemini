@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.CategorysRepository;
@@ -12,6 +15,9 @@ import com.example.domains.entities.Category;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 
 @Service
 public class CategorysServiceImpl implements CategorysService {
@@ -25,6 +31,30 @@ public class CategorysServiceImpl implements CategorysService {
 	@Override
 	public List<Category> getAll() {
 		return dao.findAllByOrderByName();
+	}
+
+	@Override
+	public Iterable<Category> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	public Page<Category> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
+	}
+
+	@Override
+	public <T> List<T> getByProjection(@NotNull Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> List<T> getByProjection(@NonNull Sort sort, @NonNull Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(@NonNull Pageable pageable, @NonNull Class<T> type) {
+		return dao.findAllBy(pageable, type);
 	}
 
 	@Override

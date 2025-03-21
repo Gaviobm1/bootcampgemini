@@ -33,6 +33,15 @@ public class LanguagesServiceImpl implements LanguagesService {
 	}
 
 	@Override
+	public Iterable<Language> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	public Page<Language> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
+	}
+
+	@Override
 	public <T> List<T> getByProjection(@NotNull Class<T> type) {
 		return dao.findAllBy(type);
 	}
@@ -90,18 +99,5 @@ public class LanguagesServiceImpl implements LanguagesService {
 	public List<Language> novedades(Timestamp fecha) {
 		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
 	}
-
-	@Override
-	public Iterable<Language> getAll(Sort sort) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getAll'");
-	}
-
-	@Override
-	public Page<Language> getAll(Pageable pageable) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getAll'");
-	}
-	
 
 }
