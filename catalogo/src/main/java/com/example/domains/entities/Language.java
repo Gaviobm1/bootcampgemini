@@ -5,6 +5,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import com.example.domains.core.entities.AbstractEntity;
 
 import jakarta.persistence.Column;
@@ -84,6 +88,10 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 
 	public List<Film> getFilms() {
 		return this.films;
+	}
+
+	public Page<Film> getFilms(Pageable pageable) {
+		return new PageImpl<>(this.films, pageable, this.films.size());
 	}
 
 	public void setFilms(List<Film> films) {

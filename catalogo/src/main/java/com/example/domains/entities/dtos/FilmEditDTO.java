@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.domains.entities.Film;
-import com.example.domains.entities.Film.SpecialFeature;
 import com.example.domains.entities.Language;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;

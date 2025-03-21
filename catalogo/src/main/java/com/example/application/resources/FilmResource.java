@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;  
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.FilmsService;
 import com.example.domains.entities.Film;
-import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.FilmDetailsDTO;
 import com.example.domains.entities.dtos.FilmEditDTO;
 import com.example.domains.entities.records.ActorName;
@@ -39,7 +38,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/films/v1")
@@ -93,7 +91,8 @@ public class FilmResource {
             throw new NotFoundException("No se encontró el actor con id " + id);
         }
         return film.get().getFilmActors().stream()
-                .map(filmActor -> new ActorName(filmActor.getActor().getActorId(), filmActor.getActor().getFirstName(), filmActor.getActor().getLastName()))
+                .map(filmActor -> new ActorName(filmActor.getActor().getActorId(), filmActor.getActor().getFirstName(),
+                        filmActor.getActor().getLastName()))
                 .toList();
     }
 
@@ -106,33 +105,30 @@ public class FilmResource {
             throw new NotFoundException("No se encontró la película con id " + id);
         }
         return film.get().getCategories().stream()
-                .map(category-> new CategoryName(category.getCategoryId(), category.getName()))
+                .map(category -> new CategoryName(category.getCategoryId(), category.getName()))
                 .toList();
     }
 
-   @PostMapping
-   @Operation(
-    summary = "Crea una nueva película", 
-    parameters = @Parameter(name = "film", description = "Los datos de la película para crear"))
-   @ApiResponse(responseCode = "201", description = "La locación de la nueva película en header 'Location'")
-   public ResponseEntity<Object> create(@Valid @RequestBody FilmEditDTO film) throws BadRequestException, DuplicateKeyException, InvalidDataException {
+    @PostMapping
+    @Operation(summary = "Crea una nueva película", parameters = @Parameter(name = "film", description = "Los datos de la película para crear"))
+    @ApiResponse(responseCode = "201", description = "La locación de la nueva película en header 'Location'")
+    public ResponseEntity<Object> create(@Valid @RequestBody FilmEditDTO film)
+            throws BadRequestException, DuplicateKeyException, InvalidDataException {
         Film newFilm = srv.add(FilmEditDTO.from(film));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(newFilm.getFilmId())
-            .toUri();
+                .path("/{id}")
+                .buildAndExpand(newFilm.getFilmId())
+                .toUri();
         return ResponseEntity.created(location).build();
     }
-    
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Actualiza la película")
     @ApiResponse(responseCode = "204", description = "El película ha sido actualizado")
     public void update(
-        @PathVariable int id,
-        @Valid
-        @RequestBody FilmEditDTO film
-    ) throws BadRequestException, NotFoundException, InvalidDataException {
+            @PathVariable int id,
+            @Valid @RequestBody FilmEditDTO film) throws BadRequestException, NotFoundException, InvalidDataException {
         if (film.getFilmId() != id) {
             throw new BadRequestException("El id de la película no coincide con el id proporcionado");
         }
@@ -148,8 +144,8 @@ public class FilmResource {
         HttpHeaders headers = new HttpHeaders();
         if (srv.getOne(id).isEmpty()) {
             headers.add("Message", "La película ha sido eliminado");
-        } else {   
-            headers.add("Message", "La película no ha sido eliminado");    
+        } else {
+            headers.add("Message", "La película no ha sido eliminado");
         }
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }

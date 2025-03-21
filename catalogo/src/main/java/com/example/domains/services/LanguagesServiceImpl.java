@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.LanguagesRepository;
@@ -12,6 +15,9 @@ import com.example.domains.entities.Language;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 
 @Service
 public class LanguagesServiceImpl implements LanguagesService {
@@ -24,6 +30,21 @@ public class LanguagesServiceImpl implements LanguagesService {
 	@Override
 	public List<Language> getAll() {
 		return dao.findAll();
+	}
+
+	@Override
+	public <T> List<T> getByProjection(@NotNull Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> List<T> getByProjection(@NonNull Sort sort, @NonNull Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(@NonNull Pageable pageable, @NonNull Class<T> type) {
+		return dao.findAllBy(pageable, type);
 	}
 
 	@Override
@@ -68,6 +89,18 @@ public class LanguagesServiceImpl implements LanguagesService {
 	@Override
 	public List<Language> novedades(Timestamp fecha) {
 		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
+	}
+
+	@Override
+	public Iterable<Language> getAll(Sort sort) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+	}
+
+	@Override
+	public Page<Language> getAll(Pageable pageable) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getAll'");
 	}
 	
 
