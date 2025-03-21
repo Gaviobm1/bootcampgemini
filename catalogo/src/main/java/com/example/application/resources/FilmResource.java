@@ -27,6 +27,7 @@ import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.FilmDetailsDTO;
 import com.example.domains.entities.dtos.FilmEditDTO;
 import com.example.domains.entities.records.ActorName;
+import com.example.domains.entities.records.CategoryName;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
@@ -85,7 +86,7 @@ public class FilmResource {
 
     @GetMapping("/{id}/actors")
     @Operation(summary = "Obtiene una lista de los actores en una película", parameters = @Parameter(name = "id", example = "3"))
-    @ApiResponse(responseCode = "200", description = "Actores del película del id especificado")
+    @ApiResponse(responseCode = "200", description = "Actores de la película del id especificado")
     public List<ActorName> getActors(@PathVariable int id) throws NotFoundException {
         Optional<Film> film = srv.getOne(id);
         if (film.isEmpty()) {
@@ -93,6 +94,19 @@ public class FilmResource {
         }
         return film.get().getFilmActors().stream()
                 .map(filmActor -> new ActorName(filmActor.getActor().getActorId(), filmActor.getActor().getFirstName(), filmActor.getActor().getLastName()))
+                .toList();
+    }
+
+    @GetMapping("/{id}/categorias")
+    @Operation(summary = "Obtiene una lista de las categorías en una película", parameters = @Parameter(name = "id", example = "3"))
+    @ApiResponse(responseCode = "200", description = "Categorías de la película del id especificado")
+    public List<CategoryName> getCategories(@PathVariable int id) throws NotFoundException {
+        Optional<Film> film = srv.getOne(id);
+        if (film.isEmpty()) {
+            throw new NotFoundException("No se encontró la película con id " + id);
+        }
+        return film.get().getCategories().stream()
+                .map(category-> new CategoryName(category.getCategoryId(), category.getName()))
                 .toList();
     }
 
