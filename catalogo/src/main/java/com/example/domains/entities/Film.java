@@ -21,6 +21,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,11 +34,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.PostUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 
@@ -159,31 +164,34 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 
 	private int length;
 
-	@Column(length=1)
-	private String rating;
+	@Convert(converter = RatingConverter.class)
+	private Rating rating;
 
 	@Column(name="release_year")
-	@NotNull(message="Release year must not be null")
 	@Min(value = 1890, message="Release year cannot be before 1890")
 	@Max(value = 2100, message="Release year cannot be after 2100")
 	private Short releaseYear;
 
+	@NotNull(message = "Rental duration must not be null")
 	@Column(name="rental_duration", nullable=false)
 	private byte rentalDuration;
 
+	@NotNull(message="Rental rate must not be null")
 	@Column(name="rental_rate", nullable=false, precision=10, scale=2)
 	private BigDecimal rentalRate;
 
+	@NotNull(message="Replacement cost must not be null")
 	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	private BigDecimal replacementCost;
 
 	@Column(nullable=false, length=128)
 	@NotBlank(message="Title must not be blank")
 	@Size(max= 45, min= 2,  message = "Title must be between 2 and 45 characters")
-	@Pattern(regexp="^[A-Z\s]*$", message = "Title must be capitalized")
+	@Pattern(regexp="^[\\p{Lu}\\s]*$", message = "Title must be capitalized")
 	private String title;
 
 	//bi-directional many-to-one association to Language
+	@NotNull(message="Language must not be null")
 	@ManyToOne
 	@JoinColumn(name="language_id", nullable=false)
 	private Language language;
@@ -226,6 +234,38 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.languageVO = languageVO;
 	}
 
+	public Film(int filmId, @NotBlank @Size(max = 128) String title, String description, @Min(1895) Short releaseYear,
+			 Language language, Language languageVO, @Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+			@Positive Integer length,
+			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
+			Rating rating) {
+		super();
+		this.filmId = filmId;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.language = language;
+		this.languageVO = languageVO;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.filmActors = new ArrayList<>();
+		this.filmCategories = new ArrayList<>();
+	}
+
+	public Film(int filmId, String title, Language language, byte rentalDuration, BigDecimal rentalRate, BigDecimal replacementCost) {
+		this.filmId = filmId;
+		this.title = title;
+		this.language = language;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.replacementCost = replacementCost;
+		this.filmActors = new ArrayList<>();
+		this.filmCategories = new ArrayList<>();
+	}
+
 	public int getFilmId() {
 		return this.filmId;
 	}
@@ -258,12 +298,12 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 		this.length = length;
 	}
 
-	public String getRating() {
+	public Rating getRating() {
 		return this.rating;
 	}
 
 	public void setRating(String rating) {
-		this.rating = rating;
+		this.rating = Rating.getEnum(rating);;
 	}
 
 	public Short getReleaseYear() {

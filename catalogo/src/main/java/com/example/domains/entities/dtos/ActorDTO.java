@@ -19,13 +19,13 @@ public class ActorDTO {
 	@JsonProperty("nombre")
 	@NotBlank
 	@Size(min = 2, max = 45)
-	@Schema(description = "Nombre del actor", minimum = "2", maximum = "45")
+	@Schema(description = "Nombre del actor", minimum = "2", maximum = "45", example = "DARYL")
 	private String firstName;
 
 	@JsonProperty("apellidos")
 	@NotBlank
 	@Size(min = 2, max = 45)
-	@Schema(description = "Apellidos del actor", minimum = "2", maximum = "45")
+	@Schema(description = "Apellidos del actor", minimum = "2", maximum = "45", example = "MCCORMACK")
 	private String lastName;
 
 	public static ActorDTO from(Actor source) {

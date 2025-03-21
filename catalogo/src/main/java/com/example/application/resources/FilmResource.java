@@ -1,22 +1,35 @@
 package com.example.application.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;  
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.FilmsService;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.FilmDetailsDTO;
+import com.example.domains.entities.dtos.FilmEditDTO;
 import com.example.domains.entities.records.ActorName;
-import com.example.domains.entities.records.Title;
+import com.example.exceptions.BadRequestException;
+import com.example.exceptions.DuplicateKeyException;
+import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -24,7 +37,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.PathParam;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/films/v1")
@@ -82,4 +96,47 @@ public class FilmResource {
                 .toList();
     }
 
+   @PostMapping
+   @Operation(
+    summary = "Crea una nueva película", 
+    parameters = @Parameter(name = "film", description = "Los datos de la película para crear"))
+   @ApiResponse(responseCode = "201", description = "La locación de la nueva película en header 'Location'")
+   public ResponseEntity<Object> create(@Valid @RequestBody FilmEditDTO film) throws BadRequestException, DuplicateKeyException, InvalidDataException {
+        Film newFilm = srv.add(FilmEditDTO.from(film));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(newFilm.getFilmId())
+            .toUri();
+        return ResponseEntity.created(location).build();
+    }
+    
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Actualiza la película")
+    @ApiResponse(responseCode = "204", description = "El película ha sido actualizado")
+    public void update(
+        @PathVariable int id,
+        @Valid
+        @RequestBody FilmEditDTO film
+    ) throws BadRequestException, NotFoundException, InvalidDataException {
+        if (film.getFilmId() != id) {
+            throw new BadRequestException("El id de la película no coincide con el id proporcionado");
+        }
+        srv.modify(FilmEditDTO.from(film));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Elimina una película por su id")
+    @ApiResponse(responseCode = "204", description = "La película ha sido eliminado")
+    public ResponseEntity<Object> delete(@PathVariable int id) throws NotFoundException {
+        srv.deleteById(id);
+        HttpHeaders headers = new HttpHeaders();
+        if (srv.getOne(id).isEmpty()) {
+            headers.add("Message", "La película ha sido eliminado");
+        } else {   
+            headers.add("Message", "La película no ha sido eliminado");    
+        }
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+    }
 }
