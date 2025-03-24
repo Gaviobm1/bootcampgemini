@@ -146,7 +146,7 @@ public class GildedRoseApprovalTest {
 				};
 
 		GildedRose app = new GildedRose(items);
-		var output = new StringBuilder();
+		StringBuilder output = new StringBuilder();
 		output.append("day,name, sellIn, quality\n");
 		List.of(items).forEach(item -> output.append("0," + item + "\n"));
 		for (int i = 1; i <= 31; i++) {
