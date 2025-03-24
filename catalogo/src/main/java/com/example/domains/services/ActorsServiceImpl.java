@@ -16,6 +16,8 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+import jakarta.transaction.Transactional;
+
 
 @Service
 public class ActorsServiceImpl implements ActorsService {
@@ -61,6 +63,7 @@ public class ActorsServiceImpl implements ActorsService {
 	}
 
 	@Override
+	@Transactional
 	public Actor add(Actor item) throws DuplicateKeyException, InvalidDataException {
 		if (item == null) {
 			throw new InvalidDataException("El actor no puede ser nulo");
@@ -75,6 +78,7 @@ public class ActorsServiceImpl implements ActorsService {
 	}
 
 	@Override
+	@Transactional
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
 		if (item == null) {
 			throw new InvalidDataException("El actor no puede ser nulo");
@@ -86,6 +90,7 @@ public class ActorsServiceImpl implements ActorsService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Actor item) throws NotFoundException, InvalidDataException {
 		if (item == null) {
 			throw new InvalidDataException("El actor no pueded ser nulo");
@@ -97,6 +102,7 @@ public class ActorsServiceImpl implements ActorsService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(Integer id) throws NotFoundException {
 		if (!dao.existsById(id)) {
 			throw new NotFoundException("El actor no existe");

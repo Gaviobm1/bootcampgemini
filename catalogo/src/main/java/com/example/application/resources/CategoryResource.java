@@ -118,7 +118,7 @@ public class CategoryResource {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Elimina una categoría por su id")
-    @ApiResponse(responseCode = "204", description = "La categoría ha sido eliminado")
+    @ApiResponse(responseCode = "204", description = "Incluye un header 'Message' que comunica si la categoía ha sido eliminado o no")
     public ResponseEntity<Object> delete(@PathVariable int id) throws NotFoundException {
         srv.deleteById(id);
         HttpHeaders headers = new HttpHeaders();

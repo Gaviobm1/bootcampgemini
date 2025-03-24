@@ -16,6 +16,7 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 
@@ -62,6 +63,7 @@ public class LanguagesServiceImpl implements LanguagesService {
 	}
 
 	@Override
+	@Transactional
 	public Language add(Language item) throws DuplicateKeyException, InvalidDataException {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
@@ -73,6 +75,7 @@ public class LanguagesServiceImpl implements LanguagesService {
 	}
 
 	@Override
+	@Transactional
 	public Language modify(Language item) throws NotFoundException, InvalidDataException {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
@@ -84,6 +87,7 @@ public class LanguagesServiceImpl implements LanguagesService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Language item) throws InvalidDataException {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
@@ -91,6 +95,7 @@ public class LanguagesServiceImpl implements LanguagesService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
 	}
