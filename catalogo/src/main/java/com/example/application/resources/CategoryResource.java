@@ -23,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.domains.contracts.services.CategorysService;
 import com.example.domains.entities.Category;
 import com.example.domains.entities.dtos.CategoryDTO;
-import com.example.domains.entities.dtos.LanguageDTO;
 import com.example.domains.entities.records.Title;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.DuplicateKeyException;

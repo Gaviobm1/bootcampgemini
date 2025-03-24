@@ -29,6 +29,7 @@ import com.example.exceptions.BadRequestException;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,12 +86,13 @@ public class ActorResource {
         parameters = @Parameter(name = "id", description = "Id del actor como path variable")
         )
     @ApiResponse(responseCode = "200", description = "El actor con el id procporcionado")
-    public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
+    @JsonView(Actor.Partial.class)
+    public Actor getOne(@PathVariable int id) throws NotFoundException {
         Optional<Actor> actor = srv.getOne(id);
         if (actor.isEmpty()) {
             throw new NotFoundException("No se encontró el actor con id " + id);
         }
-        return ActorDTO.from(actor.get());
+        return actor.get();
     }
 
     @GetMapping(path = "/{id}/films")

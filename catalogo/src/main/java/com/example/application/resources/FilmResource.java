@@ -4,9 +4,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,17 +26,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.FilmsService;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.Film.Rating;
 import com.example.domains.entities.dtos.FilmDetailsDTO;
 import com.example.domains.entities.dtos.FilmEditDTO;
+import com.example.domains.entities.dtos.FilmShortDTO;
 import com.example.domains.entities.records.ActorName;
 import com.example.domains.entities.records.CategoryName;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+import com.example.domains.entities.records.FilmSearch;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,7 +65,7 @@ public class FilmResource {
         return films.stream().map(film -> FilmDetailsDTO.from(film)).toList();
     }
 
-    @GetMapping(params = { "page" })
+    @GetMapping(params = { "page", "mode=details" })
     @Operation(summary = "Devuelve una lista de películas paginado", parameters = {
             @Parameter(name = "page", description = "Número de página (desde 0)", example = "1"),
             @Parameter(name = "size", description = "Número de elementos por página", example = "5"),
@@ -71,15 +78,70 @@ public class FilmResource {
         return new PageImpl<FilmDetailsDTO>(filmDTOs, pageable, films.getTotalElements());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", params = "mode=short")
     @Operation(summary = "Busca la película con el id especificado", parameters = @Parameter(name = "id", example = "6"))
     @ApiResponse(responseCode = "200", description = "Película con el id especificado")
-    public FilmDetailsDTO getOne(@PathVariable int id) throws NotFoundException {
+    public FilmShortDTO getOneShort(
+            @Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
+            @Parameter(required = false, allowEmptyValue = true, schema = @Schema(type = "string", allowableValues = {
+                    "details", "short",
+                    "edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
+            throws NotFoundException {
         Optional<Film> film = srv.getOne(id);
         if (film.isEmpty()) {
             throw new NotFoundException("No se encontró la película con el id " + id);
         }
-        return FilmDetailsDTO.from(film.get());
+        return FilmShortDTO.from(film.get());
+    }
+
+    @GetMapping(path = "/{id}", params = "mode=details")
+	public FilmDetailsDTO getOneDetalle(
+			@Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
+			@Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
+					"edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
+			throws Exception {
+		Optional<Film> rslt = srv.getOne(id);
+		if (rslt.isEmpty())
+			throw new NotFoundException();
+		return FilmDetailsDTO.from(rslt.get());
+	}
+
+    @Operation(summary = "Consulta filtrada de peliculas")
+    @GetMapping("/filtro")
+    public List<?> search(@ParameterObject @Valid FilmSearch filter) throws BadRequestException {
+        if (filter.minlength() != null && filter.maxlength() != null && filter.minlength() > filter.maxlength())
+            throw new BadRequestException("la duración máxima debe ser superior a la mínima");
+        Specification<Film> spec = null;
+        if (filter.title() != null && !"".equals(filter.title())) {
+            Specification<Film> cond = (root, query, builder) -> builder.like(root.get("title"),
+                    "%" + filter.title().toUpperCase() + "%");
+            spec = spec == null ? cond : spec.and(cond);
+        }
+        if (filter.rating() != null && !"".equals(filter.rating())) {
+            if (!List.of(Rating.VALUES).contains(filter.rating()))
+                throw new BadRequestException("rating desconocido");
+            Specification<Film> cond = (root, query, builder) -> builder.equal(root.get("rating"),
+                    Rating.getEnum(filter.rating()));
+            spec = spec == null ? cond : spec.and(cond);
+        }
+        if (filter.minlength() != null) {
+            Specification<Film> cond = (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("length"),
+                    filter.minlength());
+            spec = spec == null ? cond : spec.and(cond);
+        }
+        if (filter.maxlength() != null) {
+            Specification<Film> cond = (root, query, builder) -> builder.lessThanOrEqualTo(root.get("length"),
+                    filter.maxlength());
+            spec = spec == null ? cond : spec.and(cond);
+        }
+        if (spec == null)
+            throw new BadRequestException("Faltan los parametros de filtrado");
+        var query = srv.getAll(spec).stream();
+        if ("short".equals(filter.mode()))
+            return query.map(e -> FilmShortDTO.from(e)).toList();
+        else {
+            return query.map(e -> FilmDetailsDTO.from(e)).toList();
+        }
     }
 
     @GetMapping("/{id}/actors")
