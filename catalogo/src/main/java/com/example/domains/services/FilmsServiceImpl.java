@@ -107,6 +107,7 @@ public class FilmsServiceImpl implements FilmsService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Film item) throws InvalidDataException {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
@@ -114,6 +115,7 @@ public class FilmsServiceImpl implements FilmsService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
 	}
