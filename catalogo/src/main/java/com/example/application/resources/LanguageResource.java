@@ -63,7 +63,7 @@ public class LanguageResource {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Busca el idioma con el id especificado", parameters = @Parameter(name = "id", example = "6"))
+    @Operation(summary = "Busca el idioma con el id especificado", parameters = @Parameter(name = "id", example = "1"))
     @ApiResponse(responseCode = "200", description = "Idioma con el id especificado")
     public LanguageDTO getOne(@PathVariable int id) throws NotFoundException {
         Optional<Language> language = srv.getOne(id);
@@ -72,7 +72,7 @@ public class LanguageResource {
         }
         return LanguageDTO.from(language.get());
     }
-    
+
     @GetMapping(path = "/{id}/films")
     @Operation(
         summary = "Obtiene las películas en el idioma", 
