@@ -8,9 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Schema(name="Actor", description = "Datos del actor")
-@Data @AllArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor
 public class ActorDTO {
 
 	@JsonProperty("id")

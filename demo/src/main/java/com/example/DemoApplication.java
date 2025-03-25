@@ -3,10 +3,13 @@ package com.example;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+
 
 import jakarta.transaction.Transactional;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class DemoApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
