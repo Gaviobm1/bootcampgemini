@@ -104,4 +104,15 @@ async function f1() {
   console.log(x);
 }
 
-f1();
+const text = document.querySelector("#textNombre");
+const btn = document.querySelector("input[type='button']");
+const out = document.querySelector("#outSaludo");
+const saludar = () => {
+  out.textContent = `${text.dataset.tipo} ${text.value}!`;
+};
+const quitar = () => {
+  out.textContent = "";
+  text.value = "";
+};
+btn.addEventListener("click", quitar);
+text.addEventListener("input", saludar);

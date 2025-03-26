@@ -3,25 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+    crossorigin="anonymous">
+    <script src="./demo.js" defer></script>
     <title>ejemplo curso</title>
 </head>
 <body>
-<input type="text" id="textNombre" placeholder="textNombre">
+<input type="text" id="textNombre" placeholder="textNombre" data-tipo="Hola">
 <input type="button" value="quitar">
 <output id="outSaludo"></output>
-<script>
-    const text = document.querySelector("#textNombre");
-    const btn = document.querySelector("input[type='button']");
-    const out = document.querySelector("#outSaludo");
-    const saludar = () => {
-        out.textContent = `Hola ${text.value}!`;
-    }
-    const quitar = () => {
-        out.textContent = "";
-        text.value = "";
-    }
-    btn.addEventListener("click", quitar)
-    text.addEventListener("input", saludar)
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+crossorigin="anonymous">
 </script>
 </body>
 </html>
