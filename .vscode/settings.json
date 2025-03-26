@@ -3,5 +3,8 @@
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.project.sourcePaths": [
         "securing-web/src"
+    ],
+    "cSpell.words": [
+        "Catalogo"
     ]
 }
