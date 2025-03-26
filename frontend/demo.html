@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejemplo curso</title>
+</head>
+<body>
+<input type="text" id="textNombre" placeholder="textNombre">
+<input type="button" value="quitar">
+<output id="outSaludo"></output>
+<script>
+    const text = document.querySelector("#textNombre");
+    const btn = document.querySelector("input[type='button']");
+    const out = document.querySelector("#outSaludo");
+    const saludar = () => {
+        out.textContent = `Hola ${text.value}!`;
+    }
+    const quitar = () => {
+        out.textContent = "";
+        text.value = "";
+    }
+    btn.addEventListener("click", quitar)
+    text.addEventListener("input", saludar)
+</script>
+</body>
+</html>
