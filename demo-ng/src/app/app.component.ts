@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoggerService } from '@my/core';
+import { NotificationComponent } from './main/notification/notification.component';
+import { DemosComponent } from './demos/demos.component';
+import { NotificationModalComponent } from './main';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    NotificationComponent,
+    DemosComponent,
+    NotificationModalComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
