@@ -1,3 +1,4 @@
+<h1>Hola {{nombre()}}</h1>
 <p>
     <input type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" >
     <input type="button" value="Warn" (click)="vm.add('Esta notificación es un aviso',
@@ -7,4 +8,6 @@
     <input type="button" value="Log" (click)="vm.add('Para trazar con notificaciones',
     vm.NotificationType.log)" >
 </p>
-    
+<p>{{result()}}</p>
+<p>Fecha {{Fecha | date:'longDate' | uppercase}}</p>
+<p>Calcula : 2 + 2 + 6 = {{calcula(2, 2, 6) | currency:'INR'}}

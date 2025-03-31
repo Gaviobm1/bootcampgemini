@@ -1,15 +1,15 @@
-import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
+import { DatePipe, UpperCasePipe, CurrencyPipe } from '@angular/common';
 import { NotificationService } from '@my/common-services';
 import { Unsubscribable } from 'rxjs';
-import { NotificationType } from '@my/common-services';
 
 @Component({
   selector: 'app-demos',
-  imports: [],
+  imports: [DatePipe, UpperCasePipe, CurrencyPipe],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css',
 })
-export class DemosComponent implements OnInit, OnDestroy {
+export class DemosComponent {
   private fecha = new Date('2025-03-31');
   public readonly nombre = signal<string>('mundo');
   public readonly fontSize = signal<number>(16);
@@ -71,21 +71,5 @@ export class DemosComponent implements OnInit, OnDestroy {
 
   calcula(...args: number[]) {
     return args.reduce((a, b) => a + b, 0);
-  }
-
-  ngOnInit(): void {
-    this.suscriptor = this.vm.Notificacion.subscribe((n) => {
-      if (n.Type !== NotificationType.error) {
-        return;
-      }
-      window.alert(`Suscripción: ${n.Message}`);
-      this.vm.remove(this.vm.Listado.length - 1);
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.suscriptor) {
-      this.suscriptor.unsubscribe();
-    }
   }
 }
