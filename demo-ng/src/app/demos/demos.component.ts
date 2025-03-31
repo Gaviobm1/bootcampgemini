@@ -1,11 +1,17 @@
 import { Component, computed, signal } from '@angular/core';
-import { DatePipe, UpperCasePipe, CurrencyPipe } from '@angular/common';
+import {
+  DatePipe,
+  UpperCasePipe,
+  CurrencyPipe,
+  CommonModule,
+} from '@angular/common';
 import { NotificationService } from '@my/common-services';
 import { Unsubscribable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-demos',
-  imports: [DatePipe, UpperCasePipe, CurrencyPipe],
+  imports: [DatePipe, UpperCasePipe, CurrencyPipe, FormsModule, CommonModule],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css',
 })
@@ -64,7 +70,7 @@ export class DemosComponent {
   }
 
   add(actor: string) {
-    const id = this.listado()[this.listado.length - 1].id + 1;
+    const id = this.listado()[this.listado().length - 1].id + 1;
     this.listado.update((valor) => [...valor, { id, nombre: actor }]);
     this.idActor.set(id);
   }

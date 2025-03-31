@@ -1,0 +1,12 @@
+.error {
+    color: red
+}
+
+.importante {
+    font-size: 1.5rem;
+}
+
+.urgente {
+    font-style: italic;
+}
+

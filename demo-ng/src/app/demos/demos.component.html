@@ -1,5 +1,11 @@
 <h1>Hola {{nombre()}}</h1>
 <p>
+    <input type="text" [(ngModel)] ="nombre" placeholder="Escribe tu nombre" >
+    <input type="button" value="saludar" (click)="saludar()">
+    <input type="button" value="despide" (click)="despide()">
+    <input type="button" value="di algo" (click)="di('algo')">
+    <input type="button" value="cambia" (click)="cambia()">
+
     <input type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" >
     <input type="button" value="Warn" (click)="vm.add('Esta notificación es un aviso',
     vm.NotificationType.warn)" >
@@ -8,6 +14,31 @@
     <input type="button" value="Log" (click)="vm.add('Para trazar con notificaciones',
     vm.NotificationType.log)" >
 </p>
-<p>{{result()}}</p>
-<p>Fecha {{Fecha | date:'longDate' | uppercase}}</p>
-<p>Calcula : 2 + 2 + 6 = {{calcula(2, 2, 6) | currency:'INR'}}
+<p [textContent]="result()">esto se pierde</p>
+<p [hidden]="invisible()">Fecha {{Fecha | date:'longDate' | uppercase}}</p>
+@if(visible()) {
+    <p>Calcula : 2 + 2 + 6 = {{calcula(2, 2, 6) | currency:'USD'}}</p>
+}
+<p [ngClass]="estetica()">Lorem ipsum dolor, sit amet 
+    consectetur adipisicing elit. A nesciunt nulla, 
+    necessitatibus sapiente porro praesentium illo 
+    laudantium quibusdam pariatur. Iste praesentium 
+    dignissimos eos. Quas, officiis veritatis nulla 
+    voluptatibus neque quis!</p>
+
+<ul>
+    @for(item of listado(); track item.id) {
+        <li>{{item.nombre}} Element {{item.id}} of {{listado().length}}</li>
+    }
+</ul>
+
+<select [(ngModel)]="idActor">
+    @for(item of listado(); track item.id) {
+        <option [value]="item.id">
+            {{item.nombre | uppercase}} 
+        </option>
+    }
+</select>
+<p>Selected: {{idActor()}}</p>
+<input type="text" value="Jackson" #txtActor>
+<input type="button" value="Añadir" (click)="add(txtActor.value)">
