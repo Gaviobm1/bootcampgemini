@@ -4,6 +4,7 @@ import { LoggerService } from '@my/core';
 import { NotificationComponent } from './main/notification/notification.component';
 import { DemosComponent } from './demos/demos.component';
 import { NotificationModalComponent } from './main';
+import { HomeComponent } from './main/home/home.component';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { NotificationModalComponent } from './main';
     NotificationComponent,
     DemosComponent,
     NotificationModalComponent,
+    HomeComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
