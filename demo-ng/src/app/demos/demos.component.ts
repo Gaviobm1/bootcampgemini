@@ -1,17 +1,12 @@
 import { Component, computed, signal } from '@angular/core';
-import {
-  DatePipe,
-  UpperCasePipe,
-  CurrencyPipe,
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NotificationService } from '@my/common-services';
 import { Unsubscribable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-demos',
-  imports: [DatePipe, UpperCasePipe, CurrencyPipe, FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css',
 })

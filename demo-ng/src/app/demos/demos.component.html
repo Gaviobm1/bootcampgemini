@@ -1,4 +1,4 @@
-<h1>Hola {{nombre()}}</h1>
+<h1>Hola {{nombre() | uppercase}}</h1>
 <p>
     <input type="text" [(ngModel)] ="nombre" placeholder="Escribe tu nombre" >
     <input type="button" value="saludar" (click)="saludar()">
@@ -15,9 +15,9 @@
     vm.NotificationType.log)" >
 </p>
 <p [textContent]="result()">esto se pierde</p>
-<p [hidden]="invisible()">Fecha {{Fecha | date:'longDate' | uppercase}}</p>
+<p [hidden]="invisible()">Fecha {{Fecha | date:'dd/MM/yyyy' | uppercase}}</p>
 @if(visible()) {
-    <p>Calcula : 2 + 2 + 6 = {{calcula(2, 2, 6) | currency:'USD'}}</p>
+    <p>Calcula : 2 + 2 + 6 = {{calcula(2, 2, 6) | currency:'INR':'symbol':'1.0-0'}}</p>
 }
 <p [ngClass]="estetica()">Lorem ipsum dolor, sit amet 
     consectetur adipisicing elit. A nesciunt nulla, 
@@ -28,7 +28,7 @@
 
 <ul>
     @for(item of listado(); track item.id) {
-        <li>{{item.nombre}} Element {{item.id}} of {{listado().length}}</li>
+        <li>{{item.nombre | titlecase}}, Element {{item.id}} of {{listado().length}}</li>
     }
 </ul>
 
@@ -42,3 +42,4 @@
 <p>Selected: {{idActor()}}</p>
 <input type="text" value="Jackson" #txtActor>
 <input type="button" value="Añadir" (click)="add(txtActor.value)">
+<p>{{listado() | json}}</p>
