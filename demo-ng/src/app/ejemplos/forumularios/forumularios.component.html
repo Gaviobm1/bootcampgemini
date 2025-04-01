@@ -4,26 +4,30 @@
     <input type="number" value="1" #txtId>
     <input type="button" value="edit" (click)="edit(+txtId.value)">
 </p>
-<form #miFormulario>
+<form #miFormulario="ngForm">
 
     <div>
         <label for="id">id:</label>
         <input type="number" id="id" name="id" [(ngModel)]="elemento.id" #id="ngModel" required>
+        <output class="error" [hidden]="id.valid || miFormulario.pristine">{{id.errors | errormsg }}</output> 
     </div>
 
     <div>
         <label for="nombre">nombre:</label>
-        <input type="text" id="nombre" name="nombre" [(ngModel)]="elemento.nombre" #nombre="ngModel" required maxlength="2" maxlength="20">
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="elemento.nombre" #nombre="ngModel" required minlength="2" maxlength="20">
+        <output class="error" [hidden]="nombre.valid">{{nombre.errors | errormsg }}</output>    
     </div>
 
     <div>
         <label for="apellidos">apellidos:</label>
         <input type="text" id="apellidos" name="apellidos" [(ngModel)]="elemento.apellidos" #apellidos="ngModel" minlength="2" maxlength="32">
+        <output class="error" [hidden]="apellidos.valid">{{apellidos.errors | errormsg }}</output> 
     </div>
 
     <div>
         <label for="correo">correo:</label>
         <input type="email" id="correo" name="correo" [(ngModel)]="elemento.correo" #correo="ngModel">
+        
     </div>
 
     <div>
@@ -34,6 +38,7 @@
     <div>
         <label for="edad">edad:</label>
         <input type="number" id="edad" name="edad" [(ngModel)]="elemento.edad" #edad="ngModel" min="16" max="67" step="1">
+        <output class="error" [hidden]="edad.valid">{{edad.errors | errormsg }}</output> 
     </div>
 
     <div>

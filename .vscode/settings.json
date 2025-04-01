@@ -10,9 +10,11 @@
         "Catalogo",
         "consectetur",
         "dignissimos",
+        "errormsg",
         "illo",
         "Iste",
         "laudantium",
+        "maxlen",
         "necessitatibus",
         "neque",
         "nesciunt",
@@ -24,6 +26,7 @@
         "quibusdam",
         "quis",
         "sapiente",
+        "striptags",
         "veritatis",
         "voluptatibus"
     ]

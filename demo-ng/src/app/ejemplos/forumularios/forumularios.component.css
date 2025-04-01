@@ -1,0 +1,3 @@
+input.ng-untouched.ng-invalid {
+    box-shadow: 3px 3px red;
+}
