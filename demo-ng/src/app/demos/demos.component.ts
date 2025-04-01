@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { NotificationService } from '@my/common-services';
 import { Unsubscribable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { ButtonDemoComponent } from '../main/button-demo/button-demo.component';
 
 @Component({
   selector: 'app-demos',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ButtonDemoComponent],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css',
 })
