@@ -17,6 +17,9 @@
     <div class="row">
     <div class="col-md-10">
     <b>Title</b> {{item.title}} <b>Description:</b> {{item.description}}
+    @for(actor of item.actors; track actor) {
+        <p>{{actor}}</p>
+    }
 </div>
 </div>
 </div>
