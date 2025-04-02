@@ -32,7 +32,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
     return this.vm;
   }
   ngOnInit(): void {
-    this.vm.list();
+    this.vm.pagedList(1, 5, 'short');
   }
   ngOnDestroy(): void {
     this.vm.clear();
@@ -99,7 +99,7 @@ export class FilmsListComponent implements OnInit, OnDestroy {
     return this.vm;
   }
   ngOnInit(): void {
-    this.vm.list();
+    this.vm.pagedList(1, 5, 'short');
   }
   ngOnDestroy(): void {
     this.vm.clear();

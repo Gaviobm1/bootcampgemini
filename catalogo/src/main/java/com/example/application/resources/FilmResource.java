@@ -58,12 +58,6 @@ public class FilmResource {
         this.srv = srv;
     }
 
-    @GetMapping
-    public List<FilmDetailsDTO> getAll() {
-        List<Film> films = srv.getAll();
-        return films.stream().map(film -> FilmDetailsDTO.from(film)).toList();
-    }
-
     @GetMapping(params = { "page", "mode=details" })
     @Operation(summary = "Devuelve una lista de películas paginado", parameters = {
             @Parameter(name = "page", description = "Número de página (desde 0)", example = "1"),

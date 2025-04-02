@@ -45,6 +45,16 @@ export class FilmsViewModelService {
     });
   }
 
+  public pagedList(page: number, size: number, mode: string): void {
+    this.dao.page(page, size, mode).subscribe({
+      next: (data) => {
+        this.listado = data.list;
+        this.modo = 'list';
+      },
+      error: (err) => this.handleError(err),
+    });
+  }
+
   public add(): void {
     this.elemento = {};
     this.modo = 'add';
