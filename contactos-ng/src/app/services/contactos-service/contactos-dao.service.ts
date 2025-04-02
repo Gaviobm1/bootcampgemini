@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment.development';
 
 export abstract class RESTDAOService<T, K> {
   protected baseUrl = environment.apiURL;
