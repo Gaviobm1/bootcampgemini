@@ -45,8 +45,8 @@ export class FilmsViewModelService {
     });
   }
 
-  public pagedList(page: number, size: number, mode: string): void {
-    this.dao.page(page, size, mode).subscribe({
+  public pagedList(page: number, size: number): void {
+    this.dao.page(page, size).subscribe({
       next: (data) => {
         this.listado = data.list;
         this.modo = 'list';

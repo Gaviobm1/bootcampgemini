@@ -61,8 +61,7 @@ export class FilmsDAOService extends RESTDAOService<any, any> {
 
   page(
     page: number,
-    rows: number = 20,
-    mode: string
+    rows: number = 20
   ): Observable<{
     page: number;
     pages: number;
@@ -70,7 +69,7 @@ export class FilmsDAOService extends RESTDAOService<any, any> {
     list: Film[];
   }> {
     return new Observable((subscriber) => {
-      const url = `${this.baseUrl}?page=${page}&size=${rows}&sort=title%2Casc&mode=${mode}`;
+      const url = `${this.baseUrl}?page=${page}&size=${rows}&sort=title%2Casc`;
       console.log(url);
       this.http.get<any>(url, this.option).subscribe({
         next: (data) =>

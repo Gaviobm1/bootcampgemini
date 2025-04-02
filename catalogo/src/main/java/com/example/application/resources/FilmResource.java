@@ -58,7 +58,7 @@ public class FilmResource {
         this.srv = srv;
     }
 
-    @GetMapping(params = { "page", "mode=details" })
+    @GetMapping(params = { "page" })
     @Operation(summary = "Devuelve una lista de películas paginado", parameters = {
             @Parameter(name = "page", description = "Número de página (desde 0)", example = "1"),
             @Parameter(name = "size", description = "Número de elementos por página", example = "5"),
