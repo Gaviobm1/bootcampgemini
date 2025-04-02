@@ -59,7 +59,6 @@ public class FilmResource {
     }
 
     @GetMapping
-    @Hidden
     public List<FilmDetailsDTO> getAll() {
         List<Film> films = srv.getAll();
         return films.stream().map(film -> FilmDetailsDTO.from(film)).toList();
@@ -71,7 +70,7 @@ public class FilmResource {
             @Parameter(name = "size", description = "Número de elementos por página", example = "5"),
             @Parameter(name = "sort", description = "Orden en cual queremos devolver los resultados", example = "title,asc")
     })
-    @ApiResponse(responseCode = "200", description = "Busca y devulve una lista de películas")
+    @ApiResponse(responseCode = "200", description = "Busca y devuelve una lista de películas")
     public Page<FilmDetailsDTO> getAll(Pageable pageable) {
         Page<Film> films = srv.getAll(pageable);
         List<FilmDetailsDTO> filmDTOs = films.stream().map(film -> FilmDetailsDTO.from(film)).toList();
@@ -95,16 +94,16 @@ public class FilmResource {
     }
 
     @GetMapping(path = "/{id}", params = "mode=details")
-	public FilmDetailsDTO getOneDetalle(
-			@Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
-			@Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
-					"edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
-			throws Exception {
-		Optional<Film> rslt = srv.getOne(id);
-		if (rslt.isEmpty())
-			throw new NotFoundException();
-		return FilmDetailsDTO.from(rslt.get());
-	}
+    public FilmDetailsDTO getOneDetalle(
+            @Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
+            @Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
+                    "edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
+            throws Exception {
+        Optional<Film> rslt = srv.getOne(id);
+        if (rslt.isEmpty())
+            throw new NotFoundException();
+        return FilmDetailsDTO.from(rslt.get());
+    }
 
     @Operation(summary = "Consulta filtrada de peliculas")
     @GetMapping("/filtro")

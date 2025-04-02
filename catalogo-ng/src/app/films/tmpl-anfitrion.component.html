@@ -1,0 +1,6 @@
+@switch (VM.Modo) {
+    @case ('add') { <app-films-add /> }
+    @case ('edit') { <app-films-edit /> }
+    @case ('view') { <app-films-view /> }
+    @default { <app-films-list /> }
+}
