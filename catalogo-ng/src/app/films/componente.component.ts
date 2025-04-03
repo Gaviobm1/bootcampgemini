@@ -5,6 +5,7 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
+  signal,
   SimpleChanges,
 } from '@angular/core';
 import { FilmsViewModelService } from './servicios.service';
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
 import { Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-films',
@@ -32,7 +34,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
     return this.vm;
   }
   ngOnInit(): void {
-    this.vm.pagedList(1, 10);
+    this.vm.pagedList(this.vm.CurrentPage, this.vm.PageSize);
   }
   ngOnDestroy(): void {
     this.vm.clear();
@@ -89,17 +91,25 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
 
 @Component({
   selector: 'app-films-list',
-  imports: [RouterLink],
+  imports: [RouterLink, PaginatorModule],
   templateUrl: './tmpl-list.component.html',
   styleUrl: './componente.component.css',
 })
 export class FilmsListComponent implements OnInit, OnDestroy {
+  public rowsPerPage = signal<Array<number>>([5, 10, 20]);
+
   constructor(protected vm: FilmsViewModelService) {}
+
   public get VM(): FilmsViewModelService {
     return this.vm;
   }
+
+  public onPageChange(event: any) {
+    this.vm.pagedList(event.page, event.rows);
+  }
+
   ngOnInit(): void {
-    this.vm.pagedList(1, 10);
+    this.vm.pagedList(this.vm.CurrentPage, this.vm.PageSize);
   }
   ngOnDestroy(): void {
     this.vm.clear();

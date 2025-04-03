@@ -65,18 +65,19 @@ export class FilmsDAOService extends RESTDAOService<any, any> {
   ): Observable<{
     page: number;
     pages: number;
+    pageSize: number;
     rows: number;
     list: Film[];
   }> {
     return new Observable((subscriber) => {
       const url = `${this.baseUrl}?page=${page}&size=${rows}&sort=title%2Casc`;
-      console.log(url);
       this.http.get<any>(url, this.option).subscribe({
         next: (data) =>
           subscriber.next({
-            page: data.number,
-            pages: data.totalPages,
-            rows: data.totalElements,
+            page: data.page.number,
+            pages: data.page.totalPages,
+            rows: data.page.totalElements,
+            pageSize: data.page.size,
             list: data.content,
           }),
         error: (err) => subscriber.error(err),

@@ -14,6 +14,10 @@ export const AUTH_REQUIRED = new HttpContextToken<boolean>(() => false);
 export class FilmsViewModelService {
   protected modo: ModoCRUD = 'list';
   protected listado: Array<any> = [];
+  protected rows: number = 0;
+  protected currentPage: number = 0;
+  protected pages: number = 0;
+  protected pageSize: number = 0;
   protected elemento: any = {};
   protected idOriginal: any = null;
   protected listURL = '/films/v1';
@@ -35,6 +39,26 @@ export class FilmsViewModelService {
     return this.elemento;
   }
 
+  public get CurrentPage(): number {
+    return this.currentPage;
+  }
+
+  public get Pages(): number {
+    return this.pages;
+  }
+
+  public get Rows(): number {
+    return this.rows;
+  }
+
+  public get PageSize(): number {
+    return this.pageSize;
+  }
+
+  public set PageSize(pageSize: number) {
+    this.pageSize = pageSize;
+  }
+
   public list(): void {
     this.dao.query().subscribe({
       next: (data) => {
@@ -48,7 +72,12 @@ export class FilmsViewModelService {
   public pagedList(page: number, size: number): void {
     this.dao.page(page, size).subscribe({
       next: (data) => {
+        console.log(data);
         this.listado = data.list;
+        this.currentPage = data.page;
+        this.rows = data.rows;
+        this.pages = data.pages;
+        this.pageSize = data.pageSize;
         this.modo = 'list';
       },
       error: (err) => this.handleError(err),

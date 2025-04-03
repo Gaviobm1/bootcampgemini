@@ -34,3 +34,4 @@
 }
 </tbody>
 </table>
+<p-paginator (onPageChange)="onPageChange($event)" [rows]="VM.PageSize" [totalRecords]="VM.Rows" [rowsPerPageOptions]="rowsPerPage()" />
