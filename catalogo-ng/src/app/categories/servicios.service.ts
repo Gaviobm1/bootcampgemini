@@ -21,7 +21,7 @@ export class CategoriesViewModelService {
   protected pageSize: number = 0;
   protected elemento: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/categories/v1';
+  protected listURL = '/categories';
 
   constructor(
     protected notify: NotificationService,

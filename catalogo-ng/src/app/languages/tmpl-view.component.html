@@ -1,35 +1,7 @@
 <h1>Details</h1>
 @if(VM.Elemento) {
-<div class="row">
-<div class="col-xs-12 col-sm-6 col-md-6">
-<div class="well well-sm">
-<div class="row">
-<div class="col-sm-6 col-md-8">
-<h4>{{VM.Elemento.title}}</h4>
-<p [hidden]="!VM.Elemento.conflictivo"><small class="text-danger">
-<i class="fas fa-skull-crossbones mr-2"></i>Persona conflictiva</small></p>
-<p>
-<i class="fas fa-phone-alt mr-2"></i>{{VM.Elemento.telefono}}
-<br />
-<i class="fas fa-envelope mr-2"></i>
-<a href="mailto:{{VM.Elemento.email}}">{{VM.Elemento.email}}</a>
-<br />
-<i class="fas fa-gifts mr-2"></i>{{VM.Elemento.nacimiento | date:'dd/MM/yyyy'}}
-</p>
-<div class="btn-group">
-<button type="button" class="btn btn-primary">
-Social</button>
-<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-<span class="caret"></span><span class="sr-only">Social</span>
-</button>
-
+    <p>{{VM.Elemento.name}}</p>
     <input class="btn btn-secondary" type="button" value="Volver" (click)="VM.cancel()">
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    } @else {
+} @else {
     <h2>Sin datos</h2>
     }

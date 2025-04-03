@@ -21,7 +21,7 @@ export class FilmsViewModelService {
   protected pageSize: number = 0;
   protected elemento: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/films/v1';
+  protected listURL = '/films';
   protected actors: any;
 
   constructor(

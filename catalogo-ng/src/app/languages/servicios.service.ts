@@ -21,7 +21,7 @@ export class LanguagesViewModelService {
   protected pageSize: number = 0;
   protected elemento: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/languages/v1';
+  protected listURL = '/languages';
 
   constructor(
     protected notify: NotificationService,

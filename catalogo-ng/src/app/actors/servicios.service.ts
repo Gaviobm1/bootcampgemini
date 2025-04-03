@@ -21,7 +21,7 @@ export class ActorsViewModelService {
   protected pageSize: number = 0;
   protected elemento: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/actors/v1';
+  protected listURL = '/actors';
 
   constructor(
     protected notify: NotificationService,

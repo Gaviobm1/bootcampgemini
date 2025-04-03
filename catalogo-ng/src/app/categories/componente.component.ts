@@ -149,6 +149,7 @@ export class CategoriesViewComponent implements OnChanges {
   public get VM(): CategoriesViewModelService {
     return this.vm;
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.id) {
       this.vm.view(+this.id);

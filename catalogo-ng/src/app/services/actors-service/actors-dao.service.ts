@@ -30,7 +30,6 @@ export abstract class RESTDAOService<T, K> {
     return this.http.post<T>(this.baseUrl, item, this.option);
   }
   change(id: K, item: T): Observable<T> {
-    console.log(item);
     return this.http.put<T>(`${this.baseUrl}/${id}`, item, this.option);
   }
   remove(id: K): Observable<T> {

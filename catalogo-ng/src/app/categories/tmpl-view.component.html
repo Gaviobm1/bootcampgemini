@@ -1,6 +1,7 @@
 <h1>Details</h1>
 @if(VM.Elemento) {
-<p>{{VM.Elemento.name}}</p>
+    <p>{{VM.Elemento.name}}</p>
+    <input class="btn btn-secondary" type="button" value="Volver" (click)="VM.cancel()">
 } @else {
     <h2>Sin datos</h2>
     }

@@ -27,14 +27,14 @@ maxlength="50" placeholder=" ">
 </div>
 
 
-<div class="form-floating col-md-4 h-100">
+<label for="apellidos">Description:</label>
 <textarea class="form-control" [class.is-invalid]="description.invalid" type="text" name="description"
 id="apellidos"
 [(ngModel)]="VM.Elemento.description" #description="ngModel" minlength="2" maxlength="500"
 placeholder=" "></textarea>
-<label for="apellidos">Description:</label>
+
 <output class="invalid-feedback" [hidden]="description.valid">{{description.errors | errormsg}}</output>
-</div>
+
 
 
 <div class="form-floating col-md-6 col-lg-4">
