@@ -55,7 +55,7 @@ export class LanguagesDAOService extends RESTDAOService<any, any> {
     list: Language[];
   }> {
     return new Observable((subscriber) => {
-      const url = `${this.baseUrl}?page=${page}&size=${rows}&sort=title%2Casc`;
+      const url = `${this.baseUrl}?page=${page}&size=${rows}&sort=name%2Casc`;
       this.http.get<any>(url, this.option).subscribe({
         next: (data) =>
           subscriber.next({

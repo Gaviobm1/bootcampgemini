@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { Actor } from '../actors-service/actors-dao.service';
 
 export interface IFilm {
   filmId?: number;
@@ -47,6 +48,7 @@ export abstract class RESTDAOService<T, K> {
     return this.http.put<T>(`${this.baseUrl}/${id}`, item, this.option);
   }
   remove(id: K): Observable<T> {
+    console.log(`${this.baseUrl}/${id}`);
     return this.http.delete<T>(`${this.baseUrl}/${id}`, this.option);
   }
 }
@@ -57,6 +59,17 @@ export abstract class RESTDAOService<T, K> {
 export class FilmsDAOService extends RESTDAOService<any, any> {
   constructor() {
     super('films/v1');
+  }
+
+  getDetails(id: any): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}/${id}?mode=details`,
+      this.option
+    );
+  }
+
+  getEdit(id: any): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}?mode=edit`, this.option);
   }
 
   page(

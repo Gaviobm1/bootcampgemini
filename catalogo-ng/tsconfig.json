@@ -21,7 +21,8 @@
     "paths": {
       "@my/core": ["src/lib/my-core/index.ts"],
       "@my/films": ["src/app/films/index.ts"],
-      "@my/services": ["src/app/services/index.ts"]
+      "@my/services": ["src/app/services/index.ts"],
+      "@my/main": ["src/app/main/index.ts"]
     }
   },
   "angularCompilerOptions": {

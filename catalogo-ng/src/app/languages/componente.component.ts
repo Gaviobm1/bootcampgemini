@@ -8,7 +8,7 @@ import {
   signal,
   SimpleChanges,
 } from '@angular/core';
-import { FilmsViewModelService } from './servicios.service';
+import { LanguagesViewModelService } from './servicios.service';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
@@ -18,20 +18,20 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-films',
+  selector: 'app-languages',
   imports: [
-    forwardRef(() => FilmsAddComponent),
-    forwardRef(() => FilmsEditComponent),
-    forwardRef(() => FilmsViewComponent),
-    forwardRef(() => FilmsListComponent),
+    forwardRef(() => LanguagesAddComponent),
+    forwardRef(() => LanguagesEditComponent),
+    forwardRef(() => LanguagesViewComponent),
+    forwardRef(() => LanguagesListComponent),
     RouterLink,
   ],
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrl: './componente.component.css',
 })
-export class FilmsComponent implements OnInit, OnDestroy {
-  constructor(protected vm: FilmsViewModelService) {}
-  public get VM(): FilmsViewModelService {
+export class LanguagesComponent implements OnInit, OnDestroy {
+  constructor(protected vm: LanguagesViewModelService) {}
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-add',
+  selector: 'app-languages-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
@@ -55,16 +55,16 @@ export class FilmsComponent implements OnInit, OnDestroy {
     CommonModule,
   ],
 })
-export class FilmsAddComponent implements OnInit {
+export class LanguagesAddComponent implements OnInit {
   protected selectedOption: string = '';
 
-  constructor(protected vm: FilmsViewModelService) {}
-  public get VM(): FilmsViewModelService {
+  constructor(protected vm: LanguagesViewModelService) {}
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
 
   removeActor(name: string) {
-    this.vm.Elemento.actors.filter((actor: string) => actor !== name);
+    this.vm.Elemento.languages.filter((actor: string) => actor !== name);
     console.log(this.vm.Elemento);
   }
 
@@ -81,7 +81,7 @@ export class FilmsAddComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-films-edit',
+  selector: 'app-languages-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [
@@ -92,20 +92,20 @@ export class FilmsAddComponent implements OnInit {
     CommonModule,
   ],
 })
-export class FilmsEditComponent implements OnInit, OnDestroy {
+export class LanguagesEditComponent implements OnInit, OnDestroy {
   protected selectedOption: string = '';
   private obs$?: Subscription;
   constructor(
-    protected vm: FilmsViewModelService,
+    protected vm: LanguagesViewModelService,
     protected route: ActivatedRoute,
     protected router: Router
   ) {}
-  public get VM(): FilmsViewModelService {
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
 
   removeActor(name: string) {
-    this.vm.Elemento.actors = this.vm.Elemento.actors.filter(
+    this.vm.Elemento.languages = this.vm.Elemento.languages.filter(
       (actor: string) => actor !== name
     );
   }
@@ -132,17 +132,17 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-list',
+  selector: 'app-languages-list',
   imports: [RouterLink, PaginatorModule],
   templateUrl: './tmpl-list.component.html',
   styleUrl: './componente.component.css',
 })
-export class FilmsListComponent implements OnInit, OnDestroy {
+export class LanguagesListComponent implements OnInit, OnDestroy {
   public rowsPerPage = signal<Array<number>>([5, 10, 20]);
 
-  constructor(protected vm: FilmsViewModelService) {}
+  constructor(protected vm: LanguagesViewModelService) {}
 
-  public get VM(): FilmsViewModelService {
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
 
@@ -159,15 +159,18 @@ export class FilmsListComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-view',
+  selector: 'app-languages-view',
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [DatePipe],
 })
-export class FilmsViewComponent implements OnChanges {
+export class LanguagesViewComponent implements OnChanges {
   @Input() id?: string;
-  constructor(protected vm: FilmsViewModelService, protected router: Router) {}
-  public get VM(): FilmsViewModelService {
+  constructor(
+    protected vm: LanguagesViewModelService,
+    protected router: Router
+  ) {}
+  public get VM(): LanguagesViewModelService {
     return this.vm;
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -180,9 +183,9 @@ export class FilmsViewComponent implements OnChanges {
 }
 
 export const FILMS_COMPONENTES = [
-  FilmsComponent,
-  FilmsListComponent,
-  FilmsAddComponent,
-  FilmsEditComponent,
-  FilmsViewComponent,
+  LanguagesComponent,
+  LanguagesListComponent,
+  LanguagesAddComponent,
+  LanguagesEditComponent,
+  LanguagesViewComponent,
 ];

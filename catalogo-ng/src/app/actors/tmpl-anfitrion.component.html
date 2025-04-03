@@ -1,0 +1,6 @@
+@switch (VM.Modo) {
+    @case ('add') { <app-actors-add /> }
+    @case ('edit') { <app-actors-edit /> }
+    @case ('view') { <app-actors-view /> }
+    @default { <app-actors-list /> }
+}

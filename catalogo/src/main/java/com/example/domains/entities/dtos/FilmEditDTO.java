@@ -20,7 +20,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Schema(name = "Pelicula (Editar)", description = "Version editable de las películas")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FilmEditDTO {
 
 	@Schema(description = "Identificador de la película", accessMode = AccessMode.READ_ONLY, example = "0")
@@ -32,7 +34,8 @@ public class FilmEditDTO {
 	@Schema(description = "La duración de la película, en minutos", minimum = "0", exclusiveMinimum = true, example = "120")
 	private Integer length;
 
-	@Schema(description = "La clasificación por edades asignada a la película", allowableValues = {"G", "PG", "PG-13", "R", "NC-17"}, example = "R")
+	@Schema(description = "La clasificación por edades asignada a la película", allowableValues = { "G", "PG", "PG-13",
+			"R", "NC-17" }, example = "R")
 	@Pattern(regexp = "^(G|PG|PG-13|R|NC-17)$")
 	private String rating;
 
@@ -47,15 +50,13 @@ public class FilmEditDTO {
 	@NotNull
 	private BigDecimal rentalRate;
 
-	@Schema(
-        description = "El importe cobrado al cliente si la película no se devuelve o se devuelve en un estado dañado", 
-        minimum = "0", exclusiveMinimum = true, example = "25.99")
+	@Schema(description = "El importe cobrado al cliente si la película no se devuelve o se devuelve en un estado dañado", minimum = "0", exclusiveMinimum = true, example = "25.99")
 	@NotNull
 	private BigDecimal replacementCost;
 
 	@Schema(description = "El título de la película", example = "VÍA KILLERS")
 	@NotBlank
-	@Size(min=2, max = 128)
+	@Size(min = 2, max = 128)
 	private String title;
 
 	@Schema(description = "El identificador del idioma de la película", example = "1")
@@ -71,13 +72,13 @@ public class FilmEditDTO {
 	@Schema(description = "La lista de identificadores de actores que participan en la película", example = "[3, 4, 6, 7, 8]")
 	private List<Integer> actors = new ArrayList<>();
 
-    @Schema(description = "La lista de identificadores de categorías asignadas a la película", example = "[1, 2, 3]")
-    @ArraySchema(uniqueItems = true, minItems = 1, maxItems = 3)
+	@Schema(description = "La lista de identificadores de categorías asignadas a la película", example = "[1, 2, 3]")
+	@ArraySchema(uniqueItems = true, minItems = 1, maxItems = 3)
 	private List<Integer> categories = new ArrayList<>();
 
- 	public static FilmEditDTO from(Film source) {
+	public static FilmEditDTO from(Film source) {
 		return new FilmEditDTO(
-				source.getFilmId(), 
+				source.getFilmId(),
 				source.getDescription(),
 				source.getLength(),
 				source.getRating() == null ? null : source.getRating().getValue(),
@@ -90,19 +91,18 @@ public class FilmEditDTO {
 				source.getLanguageVO() == null ? null : source.getLanguageVO().getLanguageId(),
 				source.getSpecialFeatures().stream().map(item -> item.getValue()).sorted().toList(),
 				source.getActors().stream().map(item -> item.getActorId())
-					.collect(Collectors.toList()),
+						.collect(Collectors.toList()),
 				source.getCategories().stream().map(item -> item.getCategoryId())
-					.collect(Collectors.toList())
-				);
+						.collect(Collectors.toList()));
 	}
+
 	public static Film from(FilmEditDTO source) {
 		return new Film(
-				source.getFilmId(), 
+				source.getFilmId(),
 				source.getTitle(),
 				source.getLanguageId() == null ? null : new Language(source.getLanguageId()),
 				source.getRentalDuration(),
-				source.getRentalRate(),	
-				source.getReplacementCost()
-				);
+				source.getRentalRate(),
+				source.getReplacementCost());
 	}
 }

@@ -1,0 +1,6 @@
+@switch (VM.Modo) {
+    @case ('add') { <app-categories-add /> }
+    @case ('edit') { <app-categories-edit /> }
+    @case ('view') { <app-categories-view /> }
+    @default { <app-categories-list /> }
+}

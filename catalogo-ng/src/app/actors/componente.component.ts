@@ -8,7 +8,7 @@ import {
   signal,
   SimpleChanges,
 } from '@angular/core';
-import { FilmsViewModelService } from './servicios.service';
+import { ActorsViewModelService } from './servicios.service';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
@@ -18,20 +18,20 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-films',
+  selector: 'app-actors',
   imports: [
-    forwardRef(() => FilmsAddComponent),
-    forwardRef(() => FilmsEditComponent),
-    forwardRef(() => FilmsViewComponent),
-    forwardRef(() => FilmsListComponent),
+    forwardRef(() => ActorsAddComponent),
+    forwardRef(() => ActorsEditComponent),
+    forwardRef(() => ActorsViewComponent),
+    forwardRef(() => ActorsListComponent),
     RouterLink,
   ],
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrl: './componente.component.css',
 })
-export class FilmsComponent implements OnInit, OnDestroy {
-  constructor(protected vm: FilmsViewModelService) {}
-  public get VM(): FilmsViewModelService {
+export class ActorsComponent implements OnInit, OnDestroy {
+  constructor(protected vm: ActorsViewModelService) {}
+  public get VM(): ActorsViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-add',
+  selector: 'app-actors-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
@@ -55,11 +55,11 @@ export class FilmsComponent implements OnInit, OnDestroy {
     CommonModule,
   ],
 })
-export class FilmsAddComponent implements OnInit {
+export class ActorsAddComponent implements OnInit {
   protected selectedOption: string = '';
 
-  constructor(protected vm: FilmsViewModelService) {}
-  public get VM(): FilmsViewModelService {
+  constructor(protected vm: ActorsViewModelService) {}
+  public get VM(): ActorsViewModelService {
     return this.vm;
   }
 
@@ -81,7 +81,7 @@ export class FilmsAddComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-films-edit',
+  selector: 'app-actors-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [
@@ -92,15 +92,15 @@ export class FilmsAddComponent implements OnInit {
     CommonModule,
   ],
 })
-export class FilmsEditComponent implements OnInit, OnDestroy {
+export class ActorsEditComponent implements OnInit, OnDestroy {
   protected selectedOption: string = '';
   private obs$?: Subscription;
   constructor(
-    protected vm: FilmsViewModelService,
+    protected vm: ActorsViewModelService,
     protected route: ActivatedRoute,
     protected router: Router
   ) {}
-  public get VM(): FilmsViewModelService {
+  public get VM(): ActorsViewModelService {
     return this.vm;
   }
 
@@ -132,17 +132,17 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-list',
+  selector: 'app-actors-list',
   imports: [RouterLink, PaginatorModule],
   templateUrl: './tmpl-list.component.html',
   styleUrl: './componente.component.css',
 })
-export class FilmsListComponent implements OnInit, OnDestroy {
+export class ActorsListComponent implements OnInit, OnDestroy {
   public rowsPerPage = signal<Array<number>>([5, 10, 20]);
 
-  constructor(protected vm: FilmsViewModelService) {}
+  constructor(protected vm: ActorsViewModelService) {}
 
-  public get VM(): FilmsViewModelService {
+  public get VM(): ActorsViewModelService {
     return this.vm;
   }
 
@@ -159,15 +159,15 @@ export class FilmsListComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-view',
+  selector: 'app-actors-view',
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [DatePipe],
 })
-export class FilmsViewComponent implements OnChanges {
+export class ActorsViewComponent implements OnChanges {
   @Input() id?: string;
-  constructor(protected vm: FilmsViewModelService, protected router: Router) {}
-  public get VM(): FilmsViewModelService {
+  constructor(protected vm: ActorsViewModelService, protected router: Router) {}
+  public get VM(): ActorsViewModelService {
     return this.vm;
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -180,9 +180,9 @@ export class FilmsViewComponent implements OnChanges {
 }
 
 export const FILMS_COMPONENTES = [
-  FilmsComponent,
-  FilmsListComponent,
-  FilmsAddComponent,
-  FilmsEditComponent,
-  FilmsViewComponent,
+  ActorsComponent,
+  ActorsListComponent,
+  ActorsAddComponent,
+  ActorsEditComponent,
+  ActorsViewComponent,
 ];

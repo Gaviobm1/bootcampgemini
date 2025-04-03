@@ -30,6 +30,7 @@ export abstract class RESTDAOService<T, K> {
     return this.http.post<T>(this.baseUrl, item, this.option);
   }
   change(id: K, item: T): Observable<T> {
+    console.log(item);
     return this.http.put<T>(`${this.baseUrl}/${id}`, item, this.option);
   }
   remove(id: K): Observable<T> {
@@ -56,7 +57,7 @@ export class ActorsDAOService extends RESTDAOService<any, any> {
     list: Actor[];
   }> {
     return new Observable((subscriber) => {
-      const url = `${this.baseUrl}?page=${page}&size=${rows}&sort=title%2Casc`;
+      const url = `${this.baseUrl}?page=${page}&size=${rows}`;
       this.http.get<any>(url, this.option).subscribe({
         next: (data) =>
           subscriber.next({

@@ -99,6 +99,18 @@ public class FilmResource {
         return FilmDetailsDTO.from(rslt.get());
     }
 
+    @GetMapping(path = "/{id}", params = "mode=edit")
+    public FilmEditDTO getOneEdit(
+            @Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
+            @Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
+                    "edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
+            throws Exception {
+        Optional<Film> rslt = srv.getOne(id);
+        if (rslt.isEmpty())
+            throw new NotFoundException();
+        return FilmEditDTO.from(rslt.get());
+    }
+
     @Operation(summary = "Consulta filtrada de peliculas")
     @GetMapping("/filtro")
     public List<?> search(@ParameterObject @Valid FilmSearch filter) throws BadRequestException {

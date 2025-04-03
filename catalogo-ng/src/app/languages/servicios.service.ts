@@ -1,9 +1,9 @@
 import { HttpContextToken, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FilmsDAOService, NotificationService } from '@my/services';
+import { NotificationService } from '@my/services';
 import { LoggerService } from '@my/core';
 import { Router } from '@angular/router';
-import { ActorsDAOService } from '../services/actors-service/actors-dao.service';
+import { LanguagesDAOService } from '../services/languages-service/language-dao.service';
 
 export type ModoCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
 
@@ -12,7 +12,7 @@ export const AUTH_REQUIRED = new HttpContextToken<boolean>(() => false);
 @Injectable({
   providedIn: 'root',
 })
-export class FilmsViewModelService {
+export class LanguagesViewModelService {
   protected modo: ModoCRUD = 'list';
   protected listado: Array<any> = [];
   protected rows: number = 0;
@@ -21,13 +21,12 @@ export class FilmsViewModelService {
   protected pageSize: number = 0;
   protected elemento: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/films/v1';
-  protected actors: any;
+  protected listURL = '/languages/v1';
 
   constructor(
     protected notify: NotificationService,
     protected out: LoggerService,
-    protected dao: FilmsDAOService,
+    protected dao: LanguagesDAOService,
     protected router: Router
   ) {}
 
@@ -61,10 +60,6 @@ export class FilmsViewModelService {
     this.pageSize = pageSize;
   }
 
-  public get Actors() {
-    return this.actors;
-  }
-
   public list(): void {
     this.dao.query().subscribe({
       next: (data) => {
@@ -95,7 +90,7 @@ export class FilmsViewModelService {
   }
 
   public edit(key: any): void {
-    this.dao.getDetails(key).subscribe({
+    this.dao.get(key).subscribe({
       next: (data) => {
         this.elemento = data;
         this.idOriginal = key;
@@ -128,6 +123,7 @@ export class FilmsViewModelService {
     this.clear();
     this.router.navigateByUrl(this.listURL);
   }
+
   public send(): void {
     switch (this.modo) {
       case 'add':

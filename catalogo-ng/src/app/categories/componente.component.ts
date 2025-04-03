@@ -8,7 +8,7 @@ import {
   signal,
   SimpleChanges,
 } from '@angular/core';
-import { FilmsViewModelService } from './servicios.service';
+import { CategoriesViewModelService } from './servicios.service';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ErrorMessagePipe, TypeValidator } from '@my/core';
@@ -18,20 +18,20 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-films',
+  selector: 'app-categories',
   imports: [
-    forwardRef(() => FilmsAddComponent),
-    forwardRef(() => FilmsEditComponent),
-    forwardRef(() => FilmsViewComponent),
-    forwardRef(() => FilmsListComponent),
+    forwardRef(() => CategoriesAddComponent),
+    forwardRef(() => CategoriesEditComponent),
+    forwardRef(() => CategoriesViewComponent),
+    forwardRef(() => CategoriesListComponent),
     RouterLink,
   ],
   templateUrl: './tmpl-anfitrion.component.html',
   styleUrl: './componente.component.css',
 })
-export class FilmsComponent implements OnInit, OnDestroy {
-  constructor(protected vm: FilmsViewModelService) {}
-  public get VM(): FilmsViewModelService {
+export class CategoriesComponent implements OnInit, OnDestroy {
+  constructor(protected vm: CategoriesViewModelService) {}
+  public get VM(): CategoriesViewModelService {
     return this.vm;
   }
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-add',
+  selector: 'app-categories-add',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   standalone: true,
@@ -55,24 +55,12 @@ export class FilmsComponent implements OnInit, OnDestroy {
     CommonModule,
   ],
 })
-export class FilmsAddComponent implements OnInit {
+export class CategoriesAddComponent implements OnInit {
   protected selectedOption: string = '';
 
-  constructor(protected vm: FilmsViewModelService) {}
-  public get VM(): FilmsViewModelService {
+  constructor(protected vm: CategoriesViewModelService) {}
+  public get VM(): CategoriesViewModelService {
     return this.vm;
-  }
-
-  removeActor(name: string) {
-    this.vm.Elemento.actors.filter((actor: string) => actor !== name);
-    console.log(this.vm.Elemento);
-  }
-
-  removeCategory(name: string) {
-    this.vm.Elemento.categorias = this.vm.Elemento.categorias.filter(
-      (category: string) => category !== name
-    );
-    console.log(this.vm.Elemento);
   }
 
   ngOnInit(): void {
@@ -81,7 +69,7 @@ export class FilmsAddComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-films-edit',
+  selector: 'app-categories-edit',
   templateUrl: './tmpl-form.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [
@@ -92,28 +80,16 @@ export class FilmsAddComponent implements OnInit {
     CommonModule,
   ],
 })
-export class FilmsEditComponent implements OnInit, OnDestroy {
+export class CategoriesEditComponent implements OnInit, OnDestroy {
   protected selectedOption: string = '';
   private obs$?: Subscription;
   constructor(
-    protected vm: FilmsViewModelService,
+    protected vm: CategoriesViewModelService,
     protected route: ActivatedRoute,
     protected router: Router
   ) {}
-  public get VM(): FilmsViewModelService {
+  public get VM(): CategoriesViewModelService {
     return this.vm;
-  }
-
-  removeActor(name: string) {
-    this.vm.Elemento.actors = this.vm.Elemento.actors.filter(
-      (actor: string) => actor !== name
-    );
-  }
-
-  removeCategory(name: string) {
-    this.vm.Elemento.categorias = this.vm.Elemento.categorias.filter(
-      (category: string) => category !== name
-    );
   }
 
   ngOnInit(): void {
@@ -132,17 +108,17 @@ export class FilmsEditComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-list',
+  selector: 'app-categories-list',
   imports: [RouterLink, PaginatorModule],
   templateUrl: './tmpl-list.component.html',
   styleUrl: './componente.component.css',
 })
-export class FilmsListComponent implements OnInit, OnDestroy {
+export class CategoriesListComponent implements OnInit, OnDestroy {
   public rowsPerPage = signal<Array<number>>([5, 10, 20]);
 
-  constructor(protected vm: FilmsViewModelService) {}
+  constructor(protected vm: CategoriesViewModelService) {}
 
-  public get VM(): FilmsViewModelService {
+  public get VM(): CategoriesViewModelService {
     return this.vm;
   }
 
@@ -151,7 +127,7 @@ export class FilmsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.vm.pagedList(this.vm.CurrentPage, this.vm.PageSize);
+    this.vm.list();
   }
   ngOnDestroy(): void {
     this.vm.clear();
@@ -159,15 +135,18 @@ export class FilmsListComponent implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'app-films-view',
+  selector: 'app-categories-view',
   templateUrl: './tmpl-view.component.html',
   styleUrls: ['./componente.component.css'],
   imports: [DatePipe],
 })
-export class FilmsViewComponent implements OnChanges {
+export class CategoriesViewComponent implements OnChanges {
   @Input() id?: string;
-  constructor(protected vm: FilmsViewModelService, protected router: Router) {}
-  public get VM(): FilmsViewModelService {
+  constructor(
+    protected vm: CategoriesViewModelService,
+    protected router: Router
+  ) {}
+  public get VM(): CategoriesViewModelService {
     return this.vm;
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -180,9 +159,9 @@ export class FilmsViewComponent implements OnChanges {
 }
 
 export const FILMS_COMPONENTES = [
-  FilmsComponent,
-  FilmsListComponent,
-  FilmsAddComponent,
-  FilmsEditComponent,
-  FilmsViewComponent,
+  CategoriesComponent,
+  CategoriesListComponent,
+  CategoriesAddComponent,
+  CategoriesEditComponent,
+  CategoriesViewComponent,
 ];

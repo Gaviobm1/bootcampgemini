@@ -1,0 +1,6 @@
+@switch (VM.Modo) {
+    @case ('add') { <app-languages-add /> }
+    @case ('edit') { <app-languages-edit /> }
+    @case ('view') { <app-languages-view /> }
+    @default { <app-languages-list /> }
+}
